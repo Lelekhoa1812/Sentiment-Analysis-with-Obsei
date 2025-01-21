@@ -1,7 +1,3 @@
-### Expanded README.md: **Deep Dive into Obsei and Associated Technologies**
-
----
-
 # Sentiment Analysis with Obsei
 
 This project leverages the **Obsei framework** in conjunction with **Hugging Face Transformers** to perform sentiment analysis, entity extraction, and summarization on web articles. By combining advanced natural language processing (NLP) techniques with scalable workflows, this project delivers actionable insights tailored for various business and strategic purposes.
@@ -28,8 +24,7 @@ The project aims to analyze web content and provide:
 Obsei (Observability for Sentiment and Insights) is an open-source, highly modular framework designed to:
 - **Ingest data**: Extract information from sources like websites, social media platforms, customer reviews, and databases.
 - **Analyze data**: Apply NLP pipelines, including sentiment analysis, summarization, classification, and NER.
-- **Deliver insights**: Output processed results to dashboards, APIs, or other customizable sinks.
-
+- **Deliver insights**: Output processed results to dashboards, APIs, or other customizable sinks.  
 
 <img src="imgsrc/obsei_diagram.png" alt="Obsei Overview Diagram" style="width: 80%; max-width: 1000px;">  
 
@@ -155,6 +150,11 @@ cd sentiment-analysis-obsei
 ```bash
 pip install transformers obsei trafilatura langdetect
 ```
+Installing **all** requirements:  
+```bash
+pip install requirements.txt
+```
+
 
 ### 3. **Run the Script**
 ```bash
@@ -200,5 +200,11 @@ python sentiment_analysis.py
 ## **Conclusion**
 
 Obsei bridges the gap between data collection and actionable insights. By integrating advanced NLP techniques with a flexible pipeline architecture, businesses can efficiently analyze web content and derive valuable sentiment-based insights. This project demonstrates how Obsei, Hugging Face Transformers, and Trafilatura can empower organizations to make informed decisions, enhance customer experiences, and stay ahead of the competition.
+
+--- 
+
+## **Acknowledgment**
+
+This project was developed as an internship product for **iNet Solution**, showcasing the application of advanced NLP techniques to extract meaningful insights from web content. It demonstrates the potential of **Obsei** and Hugging Face Transformers for sentiment analysis, summarization, and trend detection.
 
 --- 
