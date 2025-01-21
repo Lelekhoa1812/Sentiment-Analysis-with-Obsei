@@ -25,11 +25,11 @@ Longer-term questions about rebuilding and governance of the strip are supposed 
 According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israel’s bombardment could take 21 years and cost up to $1.2bn (£980m). The WHO has said that restoring Gaza’s decimated medical infrastructure will cost $10m, as only half of the strip’s 36 hospitals are still partially operating.. 
 
 Sentiment Analysis:
-  Positive: 50.01%
-  Negative: 49.99%
+  Positive: 50.12%
+  Negative: 49.88%
 
 Key Phrases:
-Gaza, Palestinian, Hamas, Palestinians, Israeli, Israel, Hamas, Israel, Hamas, Hamas, Gaza, Saraya, Times, Israeli, West, Palestinian, Rama, Israeli, Israeli, West, Israel
+Palestinian, Saraya, Palestinians, Israeli, Israel, West, Hamas, Rama, Times, Gaza
 
 Named Entities:
   Palestinian (I-MISC)

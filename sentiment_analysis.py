@@ -1,4 +1,3 @@
-# Add the path to the locally cloned Obsei library
 import sys
 import os
 import re
@@ -74,6 +73,7 @@ analyzer_config = TransformersSentimentAnalyzerConfig(
     labels=["positive", "negative"],  # Define the sentiment labels
     multi_class_classification=False,  # Single-label classification for simplicity
 )
+
 # Analyze the data from the article with given analyzer and config loaded
 def analyze_data(analyzer, data, config):
     """Performs sentiment analysis on the fetched data."""
@@ -104,11 +104,13 @@ def filter_text(text):
     for pattern in patterns_to_remove:
         text = re.sub(pattern, "", text)
     return text.strip()
+
 # Remove unnecessary name entities
 def filter_named_entities(entities):
     """Filters out incomplete or fragmented named entities and merges subwords."""
     valid_entities = []
     current_entity = None
+    entity_set = set()
     for entity in entities:
         word = entity["word"]
         if word.startswith("##"):  # Subword continuation
@@ -116,27 +118,35 @@ def filter_named_entities(entities):
                 current_entity["word"] += word[2:]  # Append subword to the current entity
         else:
             if current_entity:  # Save the current entity before starting a new one
-                valid_entities.append(current_entity)
+                entity_key = (current_entity["word"], current_entity["entity"])
+                if entity_key not in entity_set:  # Deduplicate
+                    valid_entities.append(current_entity)
+                    entity_set.add(entity_key)
             current_entity = entity  # Start a new entity
     # Append the last entity if present
     if current_entity:
-        valid_entities.append(current_entity)
+        entity_key = (current_entity["word"], current_entity["entity"])
+        if entity_key not in entity_set:
+            valid_entities.append(current_entity)
+            entity_set.add(entity_key)
     return valid_entities
+
 # Truncate text to appropriate length matching the summarizer token allowance
 def truncate_text(text, max_length=1024): # Allowance of 1024
     """Ensures text length is compatible with models."""
     return text[:max_length]
+
 # Key Phrase Extraction
 def extract_key_phrases(text):
-    """Identifies significant key phrases using a Named Entity Recognition model (bert-base-NER from dslim)."""
+    """Identifies significant key phrases using a Named Entity Recognition model."""
     try:
         print("Extracting key phrases...")
         key_phrase_model = pipeline("ner", model="dslim/bert-base-NER", tokenizer="dslim/bert-base-NER")
         entities = key_phrase_model(text)
         entities = filter_named_entities(entities)
-        key_phrases = [entity["word"] for entity in entities if entity["entity"].startswith("B")]
-        print(f"Key Phrases: {', '.join(set(key_phrases))}")
-        return key_phrases
+        key_phrases = {entity["word"] for entity in entities if entity["entity"].startswith("B")}
+        print(f"Key Phrases: {', '.join(key_phrases)}")
+        return list(key_phrases)
     except Exception as e:
         print(f"Error extracting key phrases: {e}")
         return []
@@ -282,7 +292,6 @@ def write_analysis(data, output_path):
     except Exception as e:
         print(f"Error during analysis writing: {e}")
 
-# Main Execution
 # Main Execution
 raw_text = fetch_raw_content(url)
 # If raw text (before applying configs) can be fetched
