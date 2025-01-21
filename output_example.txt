@@ -1,0 +1,42 @@
+----
+Processed Text:
+Trong cuộc họp báo tại Phòng Bầu dục khi ký các sắc lệnh đầu tiên, Tổng thống Mỹ [Donald Trump](https://vnexpress.net/chu-de/donald-trump-1023) không đề cập đến kế hoạch áp thuế nhập khẩu hàng Trung Quốc. Trước đó, ông nhiều lần ám chỉ sẽ áp thuế vì vai trò của nền kinh tế thứ hai thế giới trong hoạt động buôn lậu fentanyl sang Mỹ, cũng như việc nước này gây ảnh hưởng lên Kênh đào Panama.
+Ngày 20/1, ông Trump yêu cầu các cơ quan chính phủ Mỹ tìm cách giải quyết hoạt động thương mại không công bằng trên toàn cầu, đồng thời điều tra liệu Bắc Kinh có tuân thủ thỏa thuận hai nước ký kết trong nhiệm kỳ đầu của ông hay không. Những việc này nhằm "đảo ngược tác động tiêu cực từ chính sách thương mại trước đây của Mỹ", theo Bloomberg.
+Năm 2020, Mỹ và Trung Quốc ký thỏa thuận chấm dứt hai năm căng thẳng thương mại. Theo đó, Trung Quốc đồng ý mua thêm 200 tỷ USD hàng Mỹ trong vòng hai năm. Dù vậy, mục tiêu này sau đó không đạt được do đại dịch.
+"Mức độ tuân thủ của Trung Quốc với thỏa thuận này sẽ được đánh giá, để quyết định xem có cần thay đổi gì không", Reuters trích tài liệu của chính phủ Mỹ cho biết.
+Ông Trump từng ám chỉ có thể áp thuế hàng nhập khẩu Trung Quốc nếu Bắc Kinh chặn thương vụ bán mảng kinh doanh của TikTok tại Mỹ cho công ty nước này. Dù vậy, ông khi đó không đưa ra mốc thời gian cụ thể và giải thích sẽ phải "họp và điện đàm" cùng Chủ tịch Trung Quốc Tập Cận Bình.
+Giới quan sát nhận định việc ông Trump không nhắm vào Bắc Kinh trong ngày đầu nhậm chức cho thấy sự chuyển biến của Tổng thống Mỹ về cách thức đàm phán. Ông dường như thận trọng hơn so với các tuyên bố mạnh mẽ đưa ra trong chiến dịch tranh cử năm ngoái.
+Dù ông Trump có thể áp thuế trong vài tuần hoặc vài tháng tới, nhiều doanh nghiệp thở phào khi thuế nhập khẩu chưa được nâng lên ngay. Trong chiến dịch tranh cử, Tổng thống Mỹ cam kết áp thuế 10-20% với mọi hàng hóa vào Mỹ. Riêng Trung Quốc là 60-100% và Canada, Mexico 25%.
+Tuy nhiên, một số chuyên gia cảnh báo ông Trump thường thay đổi quyết định bất ngờ. Vì thế, ông có thể theo đuổi kế hoạch áp thuế Trung Quốc như mục tiêu ban đầu.
+Hà Thu (theo Reuters, Bloomberg). 
+
+Sentiment Data:
+{'negative': 0.5001887679100037, 'positive': 0.49981117248535156}
+
+Key Phrases:
+Donald, T
+
+Named Entities:
+Entity: Ph, Type: I-PER
+Entity: M, Type: I-PER
+Entity: ##ỹ, Type: I-PER
+Entity: Donald, Type: I-PER
+Entity: Trump, Type: I-PER
+Entity: v, Type: I-ORG
+Entity: ##nex, Type: I-ORG
+Entity: ##press, Type: I-ORG
+Entity: T, Type: I-PER
+Entity: Q, Type: I-PER
+Entity: M, Type: I-PER
+Entity: K, Type: I-LOC
+Entity: ##nh, Type: I-LOC
+Entity: Panama, Type: I-LOC
+Entity: Trump, Type: I-PER
+Entity: M, Type: I-PER
+Entity: B, Type: I-ORG
+Entity: ##c, Type: I-ORG
+Entity: Ki, Type: I-ORG
+Entity: Bloomberg, Type: I-ORG
+Entity: USD, Type: I-ORG
+
+Summary:
