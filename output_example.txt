@@ -10,33 +10,36 @@ Dù ông Trump có thể áp thuế trong vài tuần hoặc vài tháng tới, 
 Tuy nhiên, một số chuyên gia cảnh báo ông Trump thường thay đổi quyết định bất ngờ. Vì thế, ông có thể theo đuổi kế hoạch áp thuế Trung Quốc như mục tiêu ban đầu.
 Hà Thu (theo Reuters, Bloomberg). 
 
-Sentiment Data:
-{'negative': 0.5001887679100037, 'positive': 0.49981117248535156}
+Sentiment Analysis:
+  Positive: 49.98%
+  Negative: 50.02%
 
 Key Phrases:
-Donald, T
+T, Donald
 
 Named Entities:
-Entity: Ph, Type: I-PER
-Entity: M, Type: I-PER
-Entity: ##ỹ, Type: I-PER
-Entity: Donald, Type: I-PER
-Entity: Trump, Type: I-PER
-Entity: v, Type: I-ORG
-Entity: ##nex, Type: I-ORG
-Entity: ##press, Type: I-ORG
-Entity: T, Type: I-PER
-Entity: Q, Type: I-PER
-Entity: M, Type: I-PER
-Entity: K, Type: I-LOC
-Entity: ##nh, Type: I-LOC
-Entity: Panama, Type: I-LOC
-Entity: Trump, Type: I-PER
-Entity: M, Type: I-PER
-Entity: B, Type: I-ORG
-Entity: ##c, Type: I-ORG
-Entity: Ki, Type: I-ORG
-Entity: Bloomberg, Type: I-ORG
-Entity: USD, Type: I-ORG
+  Ph (I-PER)
+  M (I-PER)
+  ##ỹ (I-PER)
+  Donald (I-PER)
+  Trump (I-PER)
+  v (I-ORG)
+  ##nex (I-ORG)
+  ##press (I-ORG)
+  T (I-PER)
+  Q (I-PER)
+  M (I-PER)
+  K (I-LOC)
+  ##nh (I-LOC)
+  Panama (I-LOC)
+  Trump (I-PER)
+  M (I-PER)
+  B (I-ORG)
+  ##c (I-ORG)
+  Ki (I-ORG)
+  Bloomberg (I-ORG)
+  USD (I-ORG)
 
 Summary:
+Ngày 20/1, ông Trump yêu cầu các cơ quan chính phủ Mỹ tìm cách giải quyết. Trung Quốc đồng ý mua thêm 200 tỷ USD hàng M Vietnamese. Những việc này nhằm "đἡi dịch" m�
+----
