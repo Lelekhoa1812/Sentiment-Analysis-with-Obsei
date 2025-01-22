@@ -15,6 +15,7 @@ from transformers import MBart50Tokenizer # mBART50 for multilingual integration
 # Visit https://www.obsei.com/ to find more on configurations of different sources (e.g., Facebook, Youtube, Reddit)
 # url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese article URL
 url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
+# url = "https://www.24h.com.vn/tin-tuc-quoc-te/nga-len-tieng-sau-khi-ong-trump-tuyen-bo-my-se-lay-lai-kenh-dao-panama-c415a1636404.html"
 crawler_source = TrafilaturaCrawlerSource()
 
 # Step 1: Configure the web crawler source
@@ -111,26 +112,50 @@ def filter_named_entities(entities):
     """Filters out incomplete or fragmented named entities and merges subwords."""
     valid_entities = []
     current_entity = None
-    entity_set = set()
     for entity in entities:
-        word = entity["word"]
+        word = entity["word"].strip()
         if word.startswith("##"):  # Subword continuation
             if current_entity:
-                current_entity["word"] += word[2:]  # Append subword to the current entity
+                # Merge subword into the previous entity
+                current_entity["word"] += word[2:]
         else:
-            if current_entity:  # Save the current entity before starting a new one
-                entity_key = (current_entity["word"], current_entity["entity"])
-                if entity_key not in entity_set:  # Deduplicate
-                    valid_entities.append(current_entity)
-                    entity_set.add(entity_key)
-            current_entity = entity  # Start a new entity
-    # Append the last entity if present
-    if current_entity:
-        entity_key = (current_entity["word"], current_entity["entity"])
-        if entity_key not in entity_set:
-            valid_entities.append(current_entity)
-            entity_set.add(entity_key)
-    return valid_entities
+            if current_entity:  # Save the completed entity
+                valid_entities.append(current_entity)
+            current_entity = entity.copy()  # Start a new entity
+    if current_entity:  # Append the last entity if present
+        valid_entities.append(current_entity)
+    return merge_named_entities(valid_entities)
+# Merging consecutive entities before determining which that would be split
+def merge_named_entities(entities):
+    """Merges consecutive entities of the same type into a single entity and removes duplicates."""
+    merged_entities = []
+    previous_entity = None
+    for entity in entities:
+        if previous_entity and previous_entity["entity"] == entity["entity"]:
+            # Merge consecutive entities of the same type
+            previous_entity["word"] += f" {entity['word']}"
+        else:
+            if previous_entity:
+                # Remove duplicates within the entity's word
+                previous_entity["word"] = remove_duplicate_words(previous_entity["word"])
+                merged_entities.append(previous_entity)
+            previous_entity = entity
+    if previous_entity:
+        # Remove duplicates for the last entity
+        previous_entity["word"] = remove_duplicate_words(previous_entity["word"])
+        merged_entities.append(previous_entity)
+    return merged_entities
+# Remove duplication from the merged listing
+def remove_duplicate_words(text):
+    """Removes duplicate words from a string."""
+    words = text.split()
+    seen = set()
+    unique_words = []
+    for word in words:
+        if word.lower() not in seen:
+            unique_words.append(word)
+            seen.add(word.lower())
+    return " ".join(unique_words)
 
 # Truncate text to appropriate length matching the summarizer token allowance
 def truncate_text(text, max_length=1024): # Allowance of 1024
@@ -159,8 +184,8 @@ def perform_ner(text):
         print("Performing Named Entity Recognition...")
         ner_model = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english", tokenizer="dbmdz/bert-large-cased-finetuned-conll03-english")
         entities = ner_model(text)
-        for entity in entities:
-            print(f"Entity: {entity['word']}, Type: {entity['entity']}")
+        # for entity in entities:
+        #     print(f"Entity: {entity['word']}, Type: {entity['entity']}")
         return entities
     except Exception as e:
         print(f"Error performing NER: {e}")
@@ -273,13 +298,15 @@ def write_analysis(data, output_path):
 
                 # Named Entity Recognition
                 named_entities = perform_ner(processed_text)
+                cleaned_entities = filter_named_entities(named_entities)
                 file.write("Named Entities:\n")
-                for entity in named_entities:
+                for entity in cleaned_entities:
                     file.write(f"  {entity['word']} ({entity['entity']})\n")
                 file.write("\n\n")
 
+
                 # Persuasive Contexts
-                persuasive_contexts = extract_persuasive_contexts(insight.processed_text)
+                persuasive_contexts = extract_persuasive_contexts(processed_text)
                 file.write("Persuasive Contexts:\n")
                 file.write("\n".join(persuasive_contexts) + "\n")
                 file.write("----\n\n")

@@ -22,78 +22,53 @@ Israel denies it has deliberately strangled aid supplies to the Palestinian terr
 The average number of trucks a day entering the territory had fallen to 18, leading aid agencies to warn that nine in 10 people were not accessing enough food. The minimum number of trucks a day needed to contain the strip’s humanitarian crisis is 500, the UN says, which should arrive each day of the first six-week phase of the ceasefire.
 But the flow of aid could take time to increase, David Miliband, the head of the International Rescue Committee, said on Monday, citing previous problems with looting and security threats from armed gangs.
 Longer-term questions about rebuilding and governance of the strip are supposed to be addressed in negotiations scheduled to begin in early February, before stage one of the ceasefire expires in early March.
-According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israel’s bombardment could take 21 years and cost up to $1.2bn (£980m). The WHO has said that restoring Gaza’s decimated medical infrastructure will cost $10m, as only half of the strip’s 36 hospitals are still partially operating.. 
+According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israel’s bombardment could take 21 years and cost up to $1.2bn (£980m). The WHO has said that restoring Gaza’s decimated medical infrastructure will cost $10bn, as only half of the strip’s 36 hospitals are still partially operating.. 
 
 Sentiment Analysis:
-  Positive: 50.12%
-  Negative: 49.88%
+  Positive: 50.10%
+  Negative: 49.90%
 
 Key Phrases:
-Palestinian, Saraya, Palestinians, Israeli, Israel, West, Hamas, Rama, Times, Gaza
+Hamas, Palestinian, Israeli, Israel, Saraya, Rama, Gaza, Palestinians Israeli, Times, West
 
 Named Entities:
   Palestinian (I-MISC)
   Hamas (I-ORG)
-  Hamas (I-ORG)
   Israel (I-LOC)
   Hamas (I-ORG)
-  Hamas (I-ORG)
-  Gaza (I-LOC)
-  City (I-LOC)
-  Sara (I-LOC)
-  ##ya (I-LOC)
-  Square (I-LOC)
+  Gaza City Saraya Square (I-LOC)
   Israeli (I-MISC)
-  West (I-LOC)
-  Bank (I-LOC)
+  West Bank (I-LOC)
   Palestinian (I-MISC)
-  Rama (I-LOC)
-  ##llah (I-LOC)
+  Ramallah (I-LOC)
   Israeli (I-MISC)
+  West Bank (I-LOC)
+  Israel Defense Forces Yesh Din (I-ORG)
   Israeli (I-MISC)
-  West (I-LOC)
-  Bank (I-LOC)
-  Israel (I-ORG)
-  Defense (I-ORG)
-  Forces (I-ORG)
-  Yes (I-ORG)
-  ##h (I-ORG)
-  Din (I-ORG)
+  Rafah (I-LOC)
   Israeli (I-MISC)
-  Ra (I-LOC)
-  ##fa (I-LOC)
-  ##h (I-LOC)
+  Gaza Netzarim Israel City (I-LOC)
   Israeli (I-MISC)
-  Gaza (I-LOC)
-  Net (I-LOC)
-  ##zar (I-LOC)
-  ##im (I-LOC)
-  Israel (I-LOC)
-  Gaza (I-LOC)
-  City (I-LOC)
-  Israeli (I-MISC)
-  Gaza (I-LOC)
-  Gaza (I-LOC)
-  City (I-LOC)
+  Gaza City (I-LOC)
 
 
 Persuasive Contexts:
-In a statement, the Israel Defense Forces said it acted “swiftly” to disperse rioters, arresting two people, a claim disputed by the human rights organisation Yesh Din.
-Whether the first six-week stage of the ceasefire will hold is yet to be seen after isolated reports of violence on Monday, including what medics said was an incident in which Israeli troops shot eight people in the Rafah area
-Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and [refugee camps](https://ecfr.eu/special/mapping_palestinian_politics/refugee_camps/), by foot or using donkey-drawn carts on roads littered with unexploded ordnance.
+In a statement, the Israel Defense Forces said it acted swiftly to disperse rioters, arresting two people, a claim disputed by the human rights organisation Yesh Din.
+Whether the first sixweek stage of the ceasefire will hold is yet to be seen after isolated reports of violence on Monday, including what medics said was an incident in which Israeli troops shot eight people in the Rafah area
+Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and  by foot or using donkeydrawn carts on roads littered with unexploded ordnance.
 Youssef, 22, from the northern city of Beit Lahia, who lost his parents and brother during the war, returned from Gaza City to his home on Monday.
-“The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble
-Another 110,000 are wounded, with a quarter of those facing life-changing injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization (WHO) has said.
-About 1,200 people were killed in Hamas’s October 2023 attack, and 250 taken hostage.
-Umm Saber, a 48-year-old widow and mother of six, managed to return to Beit Lahia on Sunday, telling the Associated Press that she had seen several bodies on the route, some of which appeared to have been lying in the open for weeks.
+The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble
+Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said.
+About 1,200 people were killed in Hamass October 2023 attack, and 250 taken hostage.
+Umm Saber, a 48yearold widow and mother of six, managed to return to Beit Lahia on Sunday, telling the Associated Press that she had seen several bodies on the route, some of which appeared to have been lying in the open for weeks.
 Her home was completely gone, she said, adding that neighbours had already started digging through the debris in search of missing relatives believed to be buried in the rubble of Israeli airstrikes
 About half of the deliveries were taken to northern Gaza, which Israel has almost completely cut off from the outside world.
 Israel denies it has deliberately strangled aid supplies to the Palestinian territory, blaming aid agencies for delays and claiming Hamas siphons off deliveries.
 The average number of trucks a day entering the territory had fallen to 18, leading aid agencies to warn that nine in 10 people were not accessing enough food
-The minimum number of trucks a day needed to contain the strip’s humanitarian crisis is 500, the UN says, which should arrive each day of the first six-week phase of the ceasefire.
+The minimum number of trucks a day needed to contain the strips humanitarian crisis is 500, the UN says, which should arrive each day of the first sixweek phase of the ceasefire.
 But the flow of aid could take time to increase, David Miliband, the head of the International Rescue Committee, said on Monday, citing previous problems with looting and security threats from armed gangs.
-Longer-term questions about rebuilding and governance of the strip are supposed to be addressed in negotiations scheduled to begin in early February, before stage one of the ceasefire expires in early March.
-According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israel’s bombardment could take 21 years and cost up to $1.2bn (£980m)
+Longerterm questions about rebuilding and governance of the strip are supposed to be addressed in negotiations scheduled to begin in early February, before stage one of the ceasefire expires in early March.
+According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israels bombardment could take 21 years and cost up to 1.2bn 980m
 ----
 
 Summary:
