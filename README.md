@@ -22,7 +22,7 @@ This project leverages the **Obsei framework** alongside **Hugging Face Transfor
 
 ## **Introduction to Obsei**
 
-### **What is Obsei?**
+### **What is [Obsei](https://www.obsei.com/)?**
 
 **Obsei** (Observability for Sentiment and Insights Extraction) is an open-source, modular framework designed to simplify data extraction, processing, and analysis. It allows developers to create highly customizable NLP pipelines for sentiment analysis, summarization, keyword detection, and more.
 

@@ -12,6 +12,7 @@ from transformers import pipeline
 from transformers import MBartForConditionalGeneration, MBartTokenizer  # mBART for summarization
 from transformers import MBart50Tokenizer # mBART50 for multilingual integration
 
+# Visit https://www.obsei.com/ to find more on configurations of different sources (e.g., Facebook, Youtube, Reddit)
 # url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese article URL
 url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
 crawler_source = TrafilaturaCrawlerSource()
