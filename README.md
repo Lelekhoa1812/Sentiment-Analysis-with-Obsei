@@ -153,15 +153,17 @@ Obsei operates through three core components:
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/your-repo/sentiment-analysis-obsei.git
-cd sentiment-analysis-obsei
+git clone https://github.com/Lelekhoa1812/Sentiment-Analysis-with-Obsei.git
+cd Sentiment-Analysis-with-Obsei
 ```
+Installing scraper and source observer libraries from obsei via:
+```bash
+pip install --editable .\[all\]
+```
+Or downloading each tools individually via [Obsei associated dependencies](https://github.com/Lelekhoa1812/Sentiment-Analysis-with-Obsei/blob/main/dependencies.md).
 
 ### **2. Install Dependencies**
-```bash
-pip install transformers obsei trafilatura langdetect
-```
-Or installing all requirements via:  
+Install requirements for this project:  
 ```bash
 pip install requirements.txt
 ```
