@@ -1,0 +1,47 @@
+----
+Processed Text:
+Warning This app is a work in progress.
+Table of Contents
+ Remix with Typescript
+ NextUI for premade components and themes
+ Styled using TailwindCSS and Stitches
+ SwiperJS for touch slider
+ Internationalization using i18n
+ Authentication, database using Supabase
+ UI Components built using Radix UI
+ Animation using Framer Motion
+ State management using Zustand
+ Custom media player using Artplayer
+ Cache using LRU Cache
+ Color manipulation and conversion using Tinycolor
+ Install dependencies using pnpm
+pnpm install
+
+Copy
+.envexample
+and update the variables 
+Start the development server
+pnpm dev
+Distributed under the MIT License. See  for more information..
+
+Sentiment Analysis:
+  Positive: 49.99%
+  Negative: 50.01%
+
+Key Phrases:
+Z, Fr, U, Typecript NextUI Tai Subase, Art Tinycolor MIT, Rax
+
+Named Entities:
+  Typescript TaiwindJ (I-MISC)
+  Subase Rax Zand (I-ORG)
+  MIT License (I-MISC)
+
+
+Persuasive Contexts:
+
+----
+
+Summary:
+Distributed under the MIT License. Warning This app is a work in progress. See  for more information.
+----
+

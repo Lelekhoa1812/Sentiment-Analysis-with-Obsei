@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Sentiment Analysis with Obsei</title>
+    <link rel="website icon" type="png" href="{{ url_for('static', filename='icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>News Sentiment Analysis Tool</h1>
+        <form id="analysisForm">
+            <input type="text" name="url" placeholder="Enter the URL of the news article" required>
+            <button type="submit">Analyze</button>
+        </form>
+        <div id="loader" class="loader hidden"></div>
+        <div id="result" class="hidden">
+            <canvas id="sentimentChart"></canvas>
+            <a id="downloadBtn" href="/download" download="obsei_analysis.txt">Download Analysis File</a>
+        </div>
+    </div>
+</body>
+</html>

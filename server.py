@@ -1,6 +1,8 @@
 import sys
 import os
 import re
+# Init a Flask server
+from flask import Flask, request, jsonify, send_file, render_template
 sys.path.insert(0, os.path.join(os.getcwd(), "obsei"))
 # Detecting language
 from langdetect import detect
@@ -15,32 +17,14 @@ from transformers import pipeline
 from transformers import MBartForConditionalGeneration, MBartTokenizer  # mBART for summarization
 from transformers import MBart50Tokenizer # mBART50 for multilingual integration
 
+app = Flask(__name__)
+
 # Visit https://www.obsei.com/ to find more on configurations of different sources (e.g., Facebook, Youtube, Reddit)
 
-#### Using Web Crawler with TrafilaturaClawler to directly observing data from a website url
+# Using Web Crawler with TrafilaturaClawler to directly observing data from a website url
 # url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese article URL
-url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
+# url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
 crawler_source = TrafilaturaCrawlerSource()
-####
-
-#### Using Reddit API inference to directly get data from Reddit application
-# reddit_credentials = RedditCredInfo(
-#     client_id="your_client_id",
-#     client_secret="your_client_secret",
-#     username="Alternative_Pain5734",
-#     password="your_password",
-#     user_agent="your_user_agent"
-# )
-# reddit_source = RedditSource()
-# reddit_config = RedditConfig(
-#     subreddits=["worldnews"],  # Specify subreddit(s)
-#     limit=10,                  # Number of posts/comments to fetch
-#     fetch_submission=True,     # Fetch posts
-#     fetch_comments=True,       # Fetch comments
-#     credentials=reddit_credentials,  # Reddit API credentials
-#     sort_by="hot",             # Sorting criteria (e.g., "hot", "new", "top")
-# )
-####
 
 #### Step 1: Configure the web crawler source
 # a. Fetch raw content for language detection
@@ -285,7 +269,7 @@ def summarize_text(text):
 
 # Vietnamese-specific summary utilities 
 # def summarize_text(text):
-#     """Summarizes Vietnamese text using mBART."""
+#     """Summarizes Vietnamese text using mBART50."""
 #     try:
 #         print("Summarizing text...")
 #         model_name = "facebook/mbart-large-50"
@@ -339,22 +323,61 @@ def write_analysis(data, output_path):
                 file.write(f"{summary}\n")
                 file.write("----\n\n")
         print(f"Results written to {output_path}")
+        return processed_text, sentiment, key_phrases, cleaned_entities, persuasive_contexts, summary
     except Exception as e:
         print(f"Error during analysis writing: {e}")
 ####
 
 # Main Execution
-raw_text = fetch_raw_content(url)
-# If raw text (before applying configs) can be fetched
-if raw_text:
-    detected_language = detect_language(raw_text)
-    data = fetch_cleaned_content(url, detected_language)
-else:
-    print("Unable to fetch raw content for language detection.")
-    data = []  # Ensure `data` is always defined
-# Check if data has valid content before proceeding
-if data:
-    analyzed_data = analyze_data(analyzer, data, analyzer_config)
-    write_analysis(analyzed_data, "output_example.txt")
-else:
-    print("No data available for analysis.")
+output_file = "obsei_analysis.txt"
+# Flask Routes
+@app.route("/")
+def index():
+    """Render the main HTML page."""
+    return render_template("index.html")
+@app.route("/analyze", methods=["POST"])
+def main():
+    url = request.form.get("url")
+    if not url:
+        return jsonify({"error": "No URL provided"}), 400
+    try:
+        raw_text = fetch_raw_content(url)
+        # If raw text (before applying configs) can be fetched
+        if raw_text:
+            detected_language = detect_language(raw_text)
+            data = fetch_cleaned_content(url, detected_language)
+        else:
+            print("Unable to fetch raw content for language detection.")
+            data = []  # Ensure `data` is always defined
+        # Check if data has valid content before proceeding
+        if data:
+            analyzed_data = analyze_data(analyzer, data, analyzer_config)
+            processed_text, sentiment, key_phrases, cleaned_entities, persuasive_contexts, summary = write_analysis(analyzed_data, output_file)
+            # Get sentiment data directly and fit to the json body sending to the frontend for pie-chart visualization
+            positive = sentiment.get("positive", 0) * 100
+            negative = sentiment.get("negative", 0) * 100
+            return jsonify({
+                "message": "Analysis complete",
+                "positive": positive,
+                "negative": negative,
+                "key_phrases": key_phrases,
+                "named_entities": cleaned_entities,
+                "persuasive_contexts": persuasive_contexts,
+                "summary_contexts": summary,
+                "download_url": "/download"
+            })
+        else:
+            print("No data available for analysis.")
+            return jsonify({"error": "No data available for analysis"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# Download routing 
+@app.route("/download", methods=["GET"])
+def download():
+    """Download the analysis file."""
+    return send_file(output_file, as_attachment=True, download_name="obsei_analysis.txt")
+
+# Run Flask App
+if __name__ == "__main__":
+    app.run(debug=True, port=5002)

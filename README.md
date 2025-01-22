@@ -15,8 +15,10 @@ This project leverages the **Obsei framework** alongside **Hugging Face Transfor
 7. [Getting Started](#getting-started)
 8. [Production Deployment](#production-deployment)
 9. [Future Enhancements](#future-enhancements)
-10. [Conclusion](#conclusion)
-11. [Acknowledgment](#acknowledgment)
+10. [Project Setup](#project-setup)
+11. [Deploying Locally](#deploying-locally)
+12. [Conclusion](#conclusion)
+13. [Acknowledgment](#acknowledgment)
 
 ---
 
@@ -203,6 +205,47 @@ python sentiment_analysis.py
 
 ---
 
+## **Project Setup**
+```plaintext
+INET/
+├── obsei/                 # Cloned obsei repo
+├── static/                # All static contents like CSS, JS
+│   ├── styles.css
+│   ├── script.js
+├── templates/             # All HTML UI templates
+│   └── index.html
+├── server.py              # Flask server
+├── sentiment_analysis.py  # To use python on terminal
+├── output_example.txt
+├── README.md
+├── dependencies.md
+├── requirements.txt
+```
+
+---
+
+## **Deploying Locally**
+UI Demo can be deployed locally on your device with Flask app. Following these instructions:  
+
+- Installing latest Flask version if you haven't:  
+```bash
+pip install flask
+```
+
+- Installing all necessary modules:  
+```bash
+pip install requirements.txt
+```
+
+- Start the Flask server:  
+```bash
+python server.py
+```
+
+- The server will run on your 5002 port http://127.0.0.1:5002.
+
+---
+
 ## **Conclusion**
 
 Obsei is a powerful framework for automating text data analysis, enabling businesses to derive actionable insights efficiently. Its modular design and integration capabilities make it a valuable tool for sentiment analysis, NER, and summarization across industries. As the framework evolves, it holds immense potential for predictive analytics, cross-lingual insights, and anomaly detection, empowering businesses to stay ahead in a data-driven world.
@@ -212,3 +255,7 @@ Obsei is a powerful framework for automating text data analysis, enabling busine
 ## **Acknowledgment**
 
 This project was developed as part of an internship product for **iNet Solution**, showcasing the integration of advanced NLP techniques with scalable workflows to provide meaningful insights from web content.
+
+---
+
+Latest update on 22/01/2025. Author: Dang Khoa Le.
