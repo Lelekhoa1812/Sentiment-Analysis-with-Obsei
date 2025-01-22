@@ -1,47 +1,50 @@
 ----
 Processed Text:
-Warning This app is a work in progress.
-Table of Contents
- Remix with Typescript
- NextUI for premade components and themes
- Styled using TailwindCSS and Stitches
- SwiperJS for touch slider
- Internationalization using i18n
- Authentication, database using Supabase
- UI Components built using Radix UI
- Animation using Framer Motion
- State management using Zustand
- Custom media player using Artplayer
- Cache using LRU Cache
- Color manipulation and conversion using Tinycolor
- Install dependencies using pnpm
-pnpm install
-
-Copy
-.envexample
-and update the variables 
-Start the development server
-pnpm dev
-Distributed under the MIT License. See  for more information..
+In an inaugural prayer service sermon, the Episcopal bishop of Washington appealed directly to  to have mercy upon communities across the country targeted by the new administrations immigration and LGBTQ policies.
+Speaking from the pulpit at the Washington national cathedral, the Right Rev Mariann Budde delivered her sermon  and an impassioned plea  as Trump sat stonefaced in the front row, alongside Melania Trump and JD Vance. Asked later about the service, Trump told reporters it was not too exciting.
+I didnt think it was a good service, no, he  as he walked into the White House on Tuesday. They could do much better.
+The sermon was part of a larger interfaith prayer service, a postinauguration day tradition hosted by the Washington national cathedral and attended by presidents of both parties at the start of their term. Tuesday mornings service was filled with blessing and prayers for the success of the new administration, but took a sharper, more political turn when Budde rose to deliver the homily.
+You have felt the providential hand of a loving God, she said, an apparent reference to Trumps inaugural address, in which he declared that God had saved him from an assassins bullet to make America great again. She continued In the name of our God, I ask you to have mercy on the people in our country who are scared now.
+Buddes sermon amounted to a bold public criticism of the new president, who spent his first hours in office signing executive orders rolling back Bidenera protections for transgender Americans and laying the groundwork to carry out his promise of mass deportations. One executive order directed the federal government to recognize only two sexes  male and female while his immigration directives moved to dismantle birthright citizenship, send troops to the southern border and suspend the US refugee admissions program.
+There are gay, lesbian and transgender children in both Democratic, Republican and independent families who fear for their lives, Budde said, asking his administration to show compassion.
+She also spoke of immigrants  those who pick our crops and work the night shift in hospitals  but may not be citizens or have the proper documentation.
+The vast majority of immigrants are not criminals. They pay taxes, and are good neighbors. They are faithful members of our churches, mosques and synagogues, gurdwara and temples, she said, adding Our God teaches us that we are to be merciful to the stranger, for we were once strangers in this land.
+When Budde finished her sermon, Trump turned and said something to Vance, who responded with a shake of his head.
+Budde has clashed with Trump before, during his first term in office. In 2020, she expressed  over Trumps appearance in front of St Johns Epsicopal church in Washington, where he held up a Bible after federal officers had used force to clear peaceful protesters demonstrating over the death of George Floyd in 2020.
+Trump allies have already begun to attack Budde over her comments. Georgia congressman Mike Collins  Budde, a US citizen, should be added to the deportation list for her words criticizing the president. Trump has  as president to protect Americans free speech..
 
 Sentiment Analysis:
-  Positive: 49.99%
-  Negative: 50.01%
+  Positive: 49.95%
+  Negative: 50.05%
 
 Key Phrases:
-Z, Fr, U, Typecript NextUI Tai Subase, Art Tinycolor MIT, Rax
+Bud, Mariann, Donald, America, White, Washington, JD, Trump, God Budde, Biden Americans, Democratic Republican, Bud God Trump, US, Trump Melania, LGBTQ
 
 Named Entities:
-  Typescript TaiwindJ (I-MISC)
-  Subase Rax Zand (I-ORG)
-  MIT License (I-MISC)
+  Episcopal (I-MISC)
+  Washington (I-LOC)
+  LGBTQ (I-MISC)
+  Washington (I-LOC)
+  Mariann Budde Trump Melania JD Vance (I-PER)
+  White House Washington (I-LOC)
+  Budde God Trump (I-PER)
+  America (I-LOC)
+  God Bud (I-PER)
+  Bidenera Americans (I-MISC)
+  US (I-LOC)
+  Democratic Republican (I-MISC)
+  Bud God Trump Vance (I-PER)
 
 
 Persuasive Contexts:
-
+In an inaugural prayer service sermon, the Episcopal bishop of Washington appealed directly to  to have mercy upon communities across the country targeted by the new administrations immigration and LGBTQ policies.
+Speaking from the pulpit at the Washington national cathedral, the Right Rev Mariann Budde delivered her sermon  and an impassioned plea  as Trump sat stonefaced in the front row, alongside Melania Trump and JD Vance
+She continued In the name of our God, I ask you to have mercy on the people in our country who are scared now.
+Buddes sermon amounted to a bold public criticism of the new president, who spent his first hours in office signing executive orders rolling back Bidenera protections for transgender Americans and laying the groundwork to carry out his promise of mass deportations
+Georgia congressman Mike Collins  Budde, a US citizen, should be added to the deportation list for her words criticizing the president
 ----
 
 Summary:
-Distributed under the MIT License. Warning This app is a work in progress. See  for more information.
+The Right Rev Mariann Budde delivered her sermon at the Washington national cathedral. The sermon was part of a larger interfaith prayer service, a postinauguration day tradition.
 ----
 

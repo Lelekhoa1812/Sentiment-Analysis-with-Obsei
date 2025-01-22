@@ -292,6 +292,7 @@ def write_analysis(data, output_path):
     """Writes analysis results into a structured output file."""
     try:
         with open(output_path, "w", encoding="utf-8") as file:
+            print("Writes analysis in progress")
             for insight in data:
                 processed_text = filter_text(insight.processed_text)
                 file.write("----\n")
@@ -323,7 +324,6 @@ def write_analysis(data, output_path):
                 file.write(f"{summary}\n")
                 file.write("----\n\n")
         print(f"Results written to {output_path}")
-        return processed_text, sentiment, key_phrases, cleaned_entities, persuasive_contexts, summary
     except Exception as e:
         print(f"Error during analysis writing: {e}")
 ####
@@ -352,16 +352,26 @@ def main():
         # Check if data has valid content before proceeding
         if data:
             analyzed_data = analyze_data(analyzer, data, analyzer_config)
-            processed_text, sentiment, key_phrases, cleaned_entities, persuasive_contexts, summary = write_analysis(analyzed_data, output_file)
+            sentiment = analyzed_data[0].segmented_data.get("classifier_data", {})
+            # Extract insights with processing
+            processed_text = analyzed_data[0].processed_text
+            key_phrases = extract_key_phrases(processed_text)
+            named_entities = perform_ner(processed_text)
+            named_entities_cleaned = filter_named_entities(named_entities)
+            persuasive_contexts = extract_persuasive_contexts(processed_text)
+            summary = summarize_text(processed_text)
+            # Write result to txt extension file
+            write_analysis(analyzed_data, output_file)
             # Get sentiment data directly and fit to the json body sending to the frontend for pie-chart visualization
             positive = sentiment.get("positive", 0) * 100
             negative = sentiment.get("negative", 0) * 100
+            # Prepare json body
             return jsonify({
                 "message": "Analysis complete",
                 "positive": positive,
                 "negative": negative,
                 "key_phrases": key_phrases,
-                "named_entities": cleaned_entities,
+                "named_entities": [entity["word"] for entity in named_entities_cleaned],
                 "persuasive_contexts": persuasive_contexts,
                 "summary_contexts": summary,
                 "download_url": "/download"
@@ -370,6 +380,7 @@ def main():
             print("No data available for analysis.")
             return jsonify({"error": "No data available for analysis"}), 500
     except Exception as e:
+        print(f"Error in /analyze: {e}")
         return jsonify({"error": str(e)}), 500
     
 # Download routing 

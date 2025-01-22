@@ -87,6 +87,7 @@ canvas {
 #result div {
     margin-top: 20px;
     text-align: left;
+    word-wrap: break-word; /* Ensure long texts break properly */
 }
 
 #result h3 {

@@ -12,9 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const loader = document.getElementById("loader");
         const resultContainer = document.getElementById("result");
         const sentimentChartCanvas = document.getElementById("sentimentChart");
+        const resultTextContainer = document.getElementById("resultText"); 
         // Config dynamic display for loader and result placeholder with state change
         loader.classList.remove("hidden");
         resultContainer.classList.add("hidden");
+        resultTextContainer.innerHTML = ""; // Clear previous results
         // POST URL data to the server and GET json response analysis (message, sentiment, download file)
         try {
             const response = await fetch("/analyze", {
@@ -46,15 +48,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h3>Key Phrases</h3>
                     <p>${data.key_phrases.join(", ")}</p>
                     <h3>Named Entities</h3>
-                    <p>${data.named_entities.join(", ")}</p>
+                    <p>${data.named_entities.join("<br>")}</p>
                     <h3>Persuasive Contexts</h3>
-                    <p>${data.persuasive_contexts.join(", ")}</p>
+                    <p>${data.persuasive_contexts.join("<br>")}</p>
                     <h3>Summary Contexts</h3>
-                    <p>${data.summary_contexts.join(", ")}</p>
+                    <p>${data.summary_contexts}</p>
                 `;
-                resultContainer.innerHTML = resultHTML;
+                resultTextContainer.innerHTML = resultHTML;
                 resultContainer.classList.remove("hidden");
-            }        
+            }
+            else {
+                alert(`Response Error: ${response}`);
+            }       
         // Catching request error with message and alert handling
         } catch (error) {
             loader.classList.add("hidden");
