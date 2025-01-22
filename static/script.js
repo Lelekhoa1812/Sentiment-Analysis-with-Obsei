@@ -12,7 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const loader = document.getElementById("loader");
         const resultContainer = document.getElementById("result");
         const sentimentChartCanvas = document.getElementById("sentimentChart");
+        sentimentChartCanvas.style.width = "400px";
+        sentimentChartCanvas.style.height = "400px";
         const resultTextContainer = document.getElementById("resultText"); 
+        // Print out any possible errors with module loading (e.g., chart, text container when not loaded correctly)
+        if (!sentimentChartCanvas || !resultTextContainer) {
+            console.error("Required elements not found", { sentimentChartCanvas, resultTextContainer });
+            return;
+        }
+        if (typeof Chart === "undefined") {
+            console.error("Chart.js not loaded.");
+        } else {
+            console.log("Chart.js loaded.");
+        }
         // Config dynamic display for loader and result placeholder with state change
         loader.classList.remove("hidden");
         resultContainer.classList.add("hidden");
@@ -31,18 +43,31 @@ document.addEventListener("DOMContentLoaded", function () {
             loader.classList.add("hidden");
             // When response is valid, obtained and connected, prepare sentiment pie-chart and dynamic html body for text
             if (response.ok) {
-                const ctx = sentimentChartCanvas.getContext("2d");
-                new Chart(ctx, {
-                    type: "pie",
-                    data: {
-                        labels: ["Positive", "Negative"],
-                        datasets: [{
-                            label: "Sentiment",
-                            data: [data.positive, data.negative],
-                            backgroundColor: ["#28a745", "#dc3545"],
-                        }],
-                    },
-                });
+                // Initialize sentiment analysis pie chart with canvas
+                const ctx = sentimentChartCanvas?.getContext("2d");
+                // Catching error for invalid context or issue with chart rendering
+                if (!ctx) {
+                    console.error("Canvas context not found.");
+                    return;
+                }     
+                try {           
+                    new Chart(ctx, {
+                        type: "pie",
+                        data: {
+                            labels: ["Positive", "Negative"],
+                            datasets: [{
+                                label: "Sentiment",
+                                data: [data.positive, data.negative],
+                                backgroundColor: ["#009999", "#dc3545"],
+                            }],
+                        },
+                    });
+                } catch (chartError) {
+                    console.error("Error initializing the chart:", chartError);
+                    alert("Failed to render the chart. Please try again.");
+                }
+                console.log("Chart.js Data:", { positive: data.positive, negative: data.negative });
+                console.log("Sentiment Chart Canvas:", sentimentChartCanvas);
                 // Prepare dynamic html body when obtaining results
                 const resultHTML = `
                     <h3>Key Phrases</h3>
@@ -54,9 +79,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     <h3>Summary Contexts</h3>
                     <p>${data.summary_contexts}</p>
                 `;
+                // Catching error if text result not found
+                if (!resultTextContainer) {
+                    console.error("Result text container not found.");
+                    return;
+                }
                 resultTextContainer.innerHTML = resultHTML;
                 resultContainer.classList.remove("hidden");
             }
+            // Catching error on response request
             else {
                 alert(`Response Error: ${response}`);
             }       

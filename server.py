@@ -1,3 +1,4 @@
+
 import sys
 import os
 import re
@@ -354,7 +355,8 @@ def main():
             analyzed_data = analyze_data(analyzer, data, analyzer_config)
             sentiment = analyzed_data[0].segmented_data.get("classifier_data", {})
             # Extract insights with processing
-            processed_text = analyzed_data[0].processed_text
+            analyzed_text = analyzed_data[0].processed_text
+            processed_text = filter_text(analyzed_text)
             key_phrases = extract_key_phrases(processed_text)
             named_entities = perform_ner(processed_text)
             named_entities_cleaned = filter_named_entities(named_entities)
