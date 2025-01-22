@@ -161,6 +161,10 @@ cd sentiment-analysis-obsei
 ```bash
 pip install transformers obsei trafilatura langdetect
 ```
+Or installing all requirements via:  
+```bash
+pip install requirements.txt
+```
 
 ### **3. Run the Script**
 ```bash
