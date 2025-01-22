@@ -34,6 +34,8 @@ Its **pluggable architecture** integrates seamlessly with various data sources (
 - **Cost-Effective**: Open-source with no licensing costs.
 - **Flexibility**: Supports multi-language analysis and domain-specific customizations.
 
+<img src="imgsrc/obsei_diagram.png" alt="Obsei Overview Diagram" style="width: 80%; max-width: 1000px;">  
+
 ---
 
 ## **Core Features**
