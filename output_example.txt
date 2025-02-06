@@ -30,7 +30,7 @@ Sentiment Analysis:
   Negative: 1379.31%
 
 Key Phrases:
-Getaf, La, LaLiga EA, Bayer, Atlético, L, River, Champions, Manchester, Copa, Jul
+Manchester, Getaf, Atlético, Jul, Bayer, Champions, Copa, River, La, L, LaLiga EA
 
 Named Entities:
   Julián Álvarez (I-PER)

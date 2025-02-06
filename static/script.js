@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Form element with id 'analysisForm' not found.");
         return;
     }
+    let sentimentChart; // Store the chart instance globally
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
         // Get URL input from user form
