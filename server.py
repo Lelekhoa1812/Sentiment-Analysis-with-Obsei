@@ -22,8 +22,9 @@ from transformers import MBart50Tokenizer # mBART50 for multilingual integration
 app = Flask(__name__)
 
 # Using Web Crawler with TrafilaturaClawler to directly observing data from a website url
-# url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese article URL
-# url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
+# url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese (vi) article URL
+# url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English (en) article URL
+# url = "https://www.marca.com/futbol/real-madrid/2025/02/05/real-madrid-acude-tribunales-obtener-videos-var-jugada-mbappe.html" # Random sample of Spanish (es) article URL
 crawler_source = TrafilaturaCrawlerSource()
 
 ##########################################

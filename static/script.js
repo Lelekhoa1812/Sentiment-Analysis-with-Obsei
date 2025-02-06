@@ -43,6 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
             loader.classList.add("hidden");
             // When response is valid, obtained and connected, prepare sentiment pie-chart and dynamic html body for text
             if (response.ok) {
+                // Destroy existing chart if it exists
+                if (sentimentChart) {
+                    sentimentChart.destroy();
+                }
                 // Initialize sentiment analysis pie chart with canvas
                 const ctx = sentimentChartCanvas?.getContext("2d");
                 // Catching error for invalid context or issue with chart rendering
