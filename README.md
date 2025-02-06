@@ -151,6 +151,12 @@ Obsei operates through three core components:
 
 ---
 
+### **Fact Checking**
+- We use Google Fact Check tool to validate negative statement pointing to any individual or organization, country.
+- Using Google Fact Check API to send query on real time looking up for data credibility on an instant.
+
+---
+
 ## **Getting Started**
 
 ### **1. Clone the Repository**

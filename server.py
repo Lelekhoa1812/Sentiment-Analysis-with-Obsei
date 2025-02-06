@@ -2,7 +2,12 @@
 import sys
 import os
 import re
-import unicodedata  # For tonal mark removal
+# For tonal mark removal
+import unicodedata  
+# Request to Google API (for fact checking) 
+import requests 
+# Upload API environment
+from dotenv import load_dotenv
 # Init a Flask server
 from flask import Flask, request, jsonify, send_file, render_template
 sys.path.insert(0, os.path.join(os.getcwd(), "obsei"))
@@ -26,6 +31,7 @@ app = Flask(__name__)
 # url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English (en) article URL
 # url = "https://www.marca.com/futbol/real-madrid/2025/02/05/real-madrid-acude-tribunales-obtener-videos-var-jugada-mbappe.html" # Random sample of Spanish (es) article URL
 crawler_source = TrafilaturaCrawlerSource()
+
 
 ##########################################
 # Helper Functions for Text Preprocessing #
@@ -66,6 +72,7 @@ def filter_text(text):
     for pattern in patterns_to_remove:
         text = re.sub(pattern, "", text)
     return text.strip()
+
 
 ##########################################
 # Raw and Clean Content Fetch Functions  #
@@ -110,6 +117,7 @@ def fetch_cleaned_content(url, language):
     except Exception as e:
         print(f"Error fetching cleaned content: {e}")
         return []
+
 
 ##########################################
 # Sentiment Analysis Enhancements        #
@@ -156,20 +164,23 @@ def analyze_sentence_sentiments(text, extreme_threshold=0.7):
         result = sentence_sentiment_model(sentence)[0]
         label = result['label'].lower()  # "positive", "negative", or "neutral"
         score = result['score']  # confidence score between 0 and 1  
-        sentence_result.append({
-            "sentence": sentence,
-            "label": label,
-            "score": score
-        }) 
+        # sentence_result.append({
+        #     "sentence": sentence,
+        #     "label": label,
+        #     "score": score
+        # }) 
         # print("Sentence List: ", sentence_result)
         # Append negative labels
         if label == "negative":
             negative_count += 1
             if score >= extreme_threshold:
-                # Store the sentence and its negative score.
+                # Fact-check the extreme negative sentences using Google Fact Check API.
+                is_fact = fact_check_sentence(sentence)
+                # Store the sentence and its negative score post fact-checking
                 extreme_negative_sentences.append({
                     "sentence": sentence,
-                    "score": score
+                    "score": score,
+                    "is_fact": is_fact
                 })        
         else:
             positive_count += 1
@@ -182,6 +193,7 @@ def analyze_sentence_sentiments(text, extreme_threshold=0.7):
         "negative": negative_percent,
         "extreme_negative_sentences": extreme_negative_sentences
     }
+
 
 ##########################################
 # NER and Key Phrase Extraction          #
@@ -288,6 +300,40 @@ def extract_persuasive_contexts(text):
     persuasive_sentences = [sentence for sentence in sentences if any(keyword in sentence.lower() for keyword in keywords)]
     return persuasive_sentences
 
+
+##########################################
+# Fact Checking Tool Function            #
+##########################################
+
+load_dotenv()  # Load environment variables from .env file
+GOOGLE_FACT_CHECK_API_KEY = os.getenv("GFC_API_KEY")
+# Check for OpenAI API key exist
+if not GOOGLE_FACT_CHECK_API_KEY:
+    raise ValueError("❌ Google Fact Check API key is missing! Add it to .env file or environment variables.")
+
+def fact_check_sentence(sentence, api_key=GOOGLE_FACT_CHECK_API_KEY):
+    """
+    Fact-checks a given sentence using the Google Fact Check Tools API.
+    This function sends the sentence as a query to the API and returns True if any
+    fact-checked claims are returned; otherwise, it returns False.
+    """
+    # URL-encode the sentence for use in the query string
+    query = requests.utils.quote(sentence)
+    url = f"https://factchecktools.googleapis.com/v1alpha1/claims:search?query={query}&key={api_key}"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            # If the API returns any claims, we consider that as evidence of fact-checking.
+            return True if "claims" in data and data["claims"] else False
+        else:
+            print(f"Fact Check API error: {response.status_code} - {response.text}")
+            return False
+    except Exception as e:
+        print(f"Error during fact check API call: {e}")
+        return False
+
+
 ##########################################
 # Summarization Functions                #
 ##########################################
@@ -341,6 +387,7 @@ def enhanced_summarize_text(text):
     except Exception as e:
         print(f"Error in enhanced summarization: {e}")
         return summarize_text(text)  # Fallback to the standard summarizer
+
 
 ##########################################
 # Writing Analysis Results               #
@@ -397,6 +444,7 @@ def write_analysis(data, output_path, sentiment, persuasive_contexts, summary, s
     except Exception as e:
         print(f"Error writing analysis: {e}")
 
+
 ##########################################
 # Flask Routes                           #
 ##########################################
@@ -441,12 +489,12 @@ def main():
             sentence_sentiment = analyze_sentence_sentiments(processed_text)
             # Write result to file
             write_analysis(analyzed_data, output_file, sentiment, persuasive_contexts, summary, sentence_sentiment)
-            
-            # Prepare JSON response (including extra field for extreme negative sentences)
-            positive = sentiment.get("positive", 0) * 100
-            negative = sentiment.get("negative", 0) * 100
+            # Prepare JSON response (including extreme negative sentences has been fact checked)
+            # positive = sentiment.get("positive", 0) * 100
+            # negative = sentiment.get("negative", 0) * 100
             return jsonify({
                 "message": "Analysis complete",
+                "language": detected_language,
                 "positive": sentence_sentiment["positive"],
                 "negative": sentence_sentiment["negative"],
                 "key_phrases": key_phrases,
