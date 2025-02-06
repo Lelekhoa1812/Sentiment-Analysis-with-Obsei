@@ -1,7 +1,9 @@
 /* Main body */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-image: url("background.jpg");
+    background-size: cover; /* Ensure the image covers the entire viewport */
+    background-position: center; /* Center the image */
     margin: 0;
     padding: 0;
 }
@@ -9,7 +11,7 @@ body {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.858);
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;

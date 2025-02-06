@@ -2,6 +2,7 @@
 import sys
 import os
 import re
+import unicodedata  # For tonal mark removal
 # Init a Flask server
 from flask import Flask, request, jsonify, send_file, render_template
 sys.path.insert(0, os.path.join(os.getcwd(), "obsei"))
@@ -20,15 +21,55 @@ from transformers import MBart50Tokenizer # mBART50 for multilingual integration
 
 app = Flask(__name__)
 
-# Visit https://www.obsei.com/ to find more on configurations of different sources (e.g., Facebook, Youtube, Reddit)
-
 # Using Web Crawler with TrafilaturaClawler to directly observing data from a website url
 # url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese article URL
 # url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English article URL
 crawler_source = TrafilaturaCrawlerSource()
 
-#### Step 1: Configure the web crawler source
-# a. Fetch raw content for language detection
+##########################################
+# Helper Functions for Text Preprocessing #
+##########################################
+
+def remove_tonal_marks(text):
+    """
+    Removes a wide range of diacritical marks and tone modifiers from text.
+    This function normalizes the text to NFD form (which separates base characters from their
+    diacritical marks), removes combining marks in the range U+0300 to U+036F, and also strips
+    additional modifier characters such as ˇ, ˘, ˙, ¨, ˆ, ˜, and `.
+    Note: This operation is applied regardless of language; if you want to conditionally apply 
+    it only to English text, wrap the call in an appropriate language-detection check.
+    """
+    # Normalize the text to NFD (decomposed form)
+    normalized = unicodedata.normalize('NFD', text)
+    # Remove all combining diacritical marks (Unicode range: U+0300 to U+036F)
+    cleaned = re.sub(r'[\u0300-\u036F]', '', normalized)
+    # Remove additional common tone/modifier symbols if needed
+    # You can extend the character class below with any additional symbols as required.
+    cleaned = re.sub(r"[ˇ˘˙¨ˆ˜`]", "", cleaned)
+    # Optionally, normalize back to NFC (composed form)
+    cleaned = unicodedata.normalize('NFC', cleaned)
+    return cleaned
+
+def truncate_text_for_model(text, max_length=1024):
+    """Truncate text to the specified length (based on tokens or characters)"""
+    # For simplicity, using character count here. In production, you might use a tokenizer.
+    return text[:max_length]
+
+def filter_text(text):
+    """Removes unnecessary text like URLs and non-standard characters."""
+    patterns_to_remove = [
+        r"http\S+",         # URLs
+        r"\[.*?\]",         # Text in brackets
+        r"[^\w\s.,]",       # Non-standard characters
+    ]
+    for pattern in patterns_to_remove:
+        text = re.sub(pattern, "", text)
+    return text.strip()
+
+##########################################
+# Raw and Clean Content Fetch Functions  #
+##########################################
+
 def fetch_raw_content(url):
     """Fetches raw article content for language detection."""
     try:
@@ -44,21 +85,16 @@ def fetch_raw_content(url):
         print(f"Error fetching raw content: {e}")
         return None
 
-# b. Detect language dynamically
 def detect_language(text):
     """Detects the language of the given text."""
     try:
-        print(f"Detected language to be {detect(text)}")
-        return detect(text)
+        language = detect(text)
+        print(f"Detected language: {language}")
+        return language
     except Exception as e:
         print(f"Error detecting language: {e}")
         return "unknown"
 
-"""
-This step fetches article content from a specified URL.
-We use the TrafilaturaCrawlerSource to extract structured content such as text, avoiding extraneous HTML or scripts.
-"""
-# c. Set Web Crawler configs. Fetch cleaned content based on detected language
 def fetch_cleaned_content(url, language):
     """Fetches cleaned article content with language-specific settings."""
     try:
@@ -73,20 +109,19 @@ def fetch_cleaned_content(url, language):
     except Exception as e:
         print(f"Error fetching cleaned content: {e}")
         return []
-####
 
-#### Step 2: Perform sentiment analysis
-"""
-Sentiment analysis is performed to classify the overall tone of the article. 
-The TransformersSentimentAnalyzer applies a multilingual model for polarity classification (positive vs. negative).
-"""
+##########################################
+# Sentiment Analysis Enhancements        #
+##########################################
+
+# Instantiate the sentiment analyzer (multilingual)
 analyzer = TransformersSentimentAnalyzer(model_name_or_path="distilbert-base-multilingual-cased")
 analyzer_config = TransformersSentimentAnalyzerConfig(
-    labels=["positive", "negative"],  # Define the sentiment labels
-    multi_class_classification=False,  # Single-label classification for simplicity
+    labels=["positive", "negative"],
+    multi_class_classification=False,
 )
-
-# Analyze the data from the article with given analyzer and config loaded
+ 
+# Analyze sentiment per sentence
 def analyze_data(analyzer, data, config):
     """Performs sentiment analysis on the fetched data."""
     try:
@@ -95,68 +130,96 @@ def analyze_data(analyzer, data, config):
     except Exception as e:
         print(f"Error analyzing data: {e}")
         return []
-####
 
-#### Step 3: Article Analyses and Data Processing
-"""
-In this step, we apply additional techniques to gain deeper insights:
-1. Key Phrase Extraction: Identifies important concepts and themes in the text.
-2. Named Entity Recognition (NER): Extracts structured information such as people, places, and organizations.
-3. Summarization: Creates a concise summary of the article.
-"""
+# Process big data, split and collect analysis
+def analyze_sentence_sentiments(text, extreme_threshold=0.7):
+    """
+    Splits the text into sentences (using '.' and ';' as delimiters),
+    performs sentiment analysis on each sentence individually,
+    computes the percentage of positive and negative sentences,
+    and collects sentences with extremely high negativity.
+    """
+    sentences = re.split(r'[.;]\s*', text)
+    total_sentences = 0
+    positive_count = 0
+    negative_count = 0
+    extreme_negative_sentences = []
+    sentence_result = []
+    # Use the sentiment analysis pipeline for individual sentences.
+    sentence_sentiment_model = pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
+    for sentence in sentences:
+        sentence = sentence.strip() # Split each to analyze
+        if not sentence:
+            continue
+        total_sentences += 1
+        result = sentence_sentiment_model(sentence)[0]
+        label = result['label'].lower()  # "positive", "negative", or "neutral"
+        score = result['score']  # confidence score between 0 and 1  
+        sentence_result.append({
+            "sentence": sentence,
+            "label": label,
+            "score": score
+        }) 
+        print("Sentence List: ", sentence_result)
+        # Append negative labels
+        if label == "negative":
+            negative_count += 1
+            if score >= extreme_threshold:
+                # Store the sentence and its negative score.
+                extreme_negative_sentences.append({
+                    "sentence": sentence,
+                    "score": score
+                })        
+        else:
+            positive_count += 1
+    # Compute overall pos/neg percentage
+    positive_percent = (positive_count / total_sentences) * 100 if total_sentences else 0
+    negative_percent = (negative_count / total_sentences) * 100 if total_sentences else 0
+    # Return percentage level computed in overall and list of extreme negative sentences
+    return {
+        "positive": positive_percent,
+        "negative": negative_percent,
+        "extreme_negative_sentences": extreme_negative_sentences
+    }
 
-# Helper Functions
-# Removing unnecessary text
-def filter_text(text):
-    """Removes unnecessary text like URLs, non-standard characters."""
-    patterns_to_remove = [
-        r"http\S+",         # URLs
-        r"\[.*?\]",         # Text in brackets
-        r"[^\w\s.,]",       # Non-standard characters
-    ]
-    for pattern in patterns_to_remove:
-        text = re.sub(pattern, "", text)
-    return text.strip()
+##########################################
+# NER and Key Phrase Extraction          #
+##########################################
 
-# Remove unnecessary name entities
 def filter_named_entities(entities):
-    """Filters out incomplete or fragmented named entities and merges subwords."""
+    """Filters and merges named entities (merges subwords and consecutive same-type tokens)."""
     valid_entities = []
     current_entity = None
     for entity in entities:
         word = entity["word"].strip()
-        if word.startswith("##"):  # Subword continuation
+        if word.startswith("##"):
             if current_entity:
-                # Merge subword into the previous entity
                 current_entity["word"] += word[2:]
         else:
-            if current_entity:  # Save the completed entity
+            if current_entity:
                 valid_entities.append(current_entity)
-            current_entity = entity.copy()  # Start a new entity
-    if current_entity:  # Append the last entity if present
+            current_entity = entity.copy()
+    if current_entity:
         valid_entities.append(current_entity)
     return merge_named_entities(valid_entities)
-# Merging consecutive entities before determining which that would be split
+
 def merge_named_entities(entities):
     """Merges consecutive entities of the same type into a single entity and removes duplicates."""
     merged_entities = []
     previous_entity = None
     for entity in entities:
         if previous_entity and previous_entity["entity"] == entity["entity"]:
-            # Merge consecutive entities of the same type
             previous_entity["word"] += f" {entity['word']}"
         else:
             if previous_entity:
-                # Remove duplicates within the entity's word
                 previous_entity["word"] = remove_duplicate_words(previous_entity["word"])
                 merged_entities.append(previous_entity)
             previous_entity = entity
     if previous_entity:
-        # Remove duplicates for the last entity
         previous_entity["word"] = remove_duplicate_words(previous_entity["word"])
         merged_entities.append(previous_entity)
     return merged_entities
-# Remove duplication from the merged listing
+
 def remove_duplicate_words(text):
     """Removes duplicate words from a string."""
     words = text.split()
@@ -168,12 +231,6 @@ def remove_duplicate_words(text):
             seen.add(word.lower())
     return " ".join(unique_words)
 
-# Truncate text to appropriate length matching the summarizer token allowance
-def truncate_text(text, max_length=1024): # Allowance of 1024
-    """Ensures text length is compatible with models."""
-    return text[:max_length]
-
-# Key Phrase Extraction
 def extract_key_phrases(text):
     """Identifies significant key phrases using a Named Entity Recognition model."""
     try:
@@ -182,27 +239,23 @@ def extract_key_phrases(text):
         entities = key_phrase_model(text)
         entities = filter_named_entities(entities)
         key_phrases = {entity["word"] for entity in entities if entity["entity"].startswith("B")}
-        print(f"Key Phrases: {', '.join(key_phrases)}")
+        # print(f"Key Phrases: {', '.join(key_phrases)}")
         return list(key_phrases)
     except Exception as e:
         print(f"Error extracting key phrases: {e}")
         return []
 
-# Named Entity Recognition
 def perform_ner(text):
-    """Extracts named entities for structured understanding (using the bert-large-cased-finetuned-conll03-english model from dbmdz) """
+    """Extracts named entities using a pre-trained NER model."""
     try:
         print("Performing Named Entity Recognition...")
         ner_model = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english", tokenizer="dbmdz/bert-large-cased-finetuned-conll03-english")
         entities = ner_model(text)
-        # for entity in entities:
-        #     print(f"Entity: {entity['word']}, Type: {entity['entity']}")
         return entities
     except Exception as e:
         print(f"Error performing NER: {e}")
         return []
-    
-# Look up for the usage of persuasive languages that has been applied in any language (add more as it should)
+
 def get_persuasive_keywords(language):
     """Returns an extensive list of persuasive keywords for the given language."""
     keyword_table = {
@@ -211,9 +264,7 @@ def get_persuasive_keywords(language):
             "mandatory", "necessary", "indispensable", "require", "obligatory", "compulsory", "priority", 
             "fundamental", "crucial", "pivotal", "significant", "urgent", "key", "pressing", "core", 
             "recommend", "advise", "propose", "demand", "insist", "encourage", "plead", "advocate", 
-            "support", "endorse", "stress", "highlight", "emphasize", "persuade", "convince", 
-            "appeal", "assert", "claim", "argue", "justify", "prove", "validate", "affirm", 
-            "guarantee", "assure", "ensure", "certify", "commit", "pledge", "promise"
+            "support", "endorse", "stress", "highlight", "emphasize", "persuade", "convince"
         ],
         "vi": [
             "nên", "cần phải", "quan trọng", "thiết yếu", "cấp bách", "không thể thiếu", "bắt buộc", 
@@ -227,29 +278,30 @@ def get_persuasive_keywords(language):
         ],
     }
     return keyword_table.get(language, [])
-# Extracting persuasive contexts from keyword dictionary
+
 def extract_persuasive_contexts(text):
     """Identifies sentences with persuasive or emotional language."""
     language = detect_language(text)
     keywords = get_persuasive_keywords(language)
-    sentences = text.split(". ")
+    sentences = re.split(r'[.;]\s*', text)
     persuasive_sentences = [sentence for sentence in sentences if any(keyword in sentence.lower() for keyword in keywords)]
     return persuasive_sentences
 
-# Generic summary
+##########################################
+# Summarization Functions                #
+##########################################
+
 def summarize_text(text):
     """Generates a concise summary using Facebook's Bart Large CNN model."""
     try:
-        print("Summarizing text...")
-        text = truncate_text(text)  # Ensure compatible text length
-        input_length = len(text.split())  # Calculate input length
-        min_input_length = 50  # Define a minimum length threshold for summarization
-        if input_length < min_input_length:
-            print("Input text is too short for summarization. Returning input as summary.")
-            return text  # Use input as summary for very short text
-        max_summary_length = min(1024, max(input_length // 2, 50))  # Adjust dynamic max_length
-        min_summary_length = min(max_summary_length // 2, 30)  # Ensure min_length is reasonable
-        # Summarization pipeline
+        print("Summarizing text with Bart...")
+        text = truncate_text_for_model(text)  # Ensure compatible text length
+        input_length = len(text.split())
+        if input_length < 50:
+            print("Input too short for summarization. Returning input as summary.")
+            return text
+        max_summary_length = min(1024, max(input_length // 2, 50))
+        min_summary_length = min(max_summary_length // 2, 30)
         summarization_model = pipeline("summarization", model="facebook/bart-large-cnn", tokenizer="facebook/bart-large-cnn")
         summary = summarization_model(
             text,
@@ -259,83 +311,98 @@ def summarize_text(text):
             num_beams=4,
             length_penalty=1.5
         )
-        print(f"Summary: {summary[0]['summary_text']}")
+        # print(f"Summary: {summary[0]['summary_text']}")
         return summary[0]["summary_text"]
     except IndexError:
-        print("IndexError: Likely due to tokenization or text length mismatch. Returning truncated input as fallback.")
-        return truncate_text(text, 512)  # Fallback: truncate to first 1024 tokens
+        print("IndexError during summarization. Returning fallback truncated text.")
+        return truncate_text_for_model(text, 512)
     except Exception as e:
         print(f"Error summarizing text: {e}")
         return "Summarization unavailable."
 
-# Vietnamese-specific summary utilities 
-# def summarize_text(text):
-#     """Summarizes Vietnamese text using mBART50."""
-#     try:
-#         print("Summarizing text...")
-#         model_name = "facebook/mbart-large-50"
-#         tokenizer = MBart50Tokenizer.from_pretrained(model_name)
-#         model = MBartForConditionalGeneration.from_pretrained(model_name)
-#         # Preprocess text for mBART
-#         inputs = tokenizer(text, return_tensors="pt", max_length=2048, truncation=True)
-#         summary_ids = model.generate(inputs.input_ids, max_length=500, min_length=50, length_penalty=2.0, num_beams=4)
-#         summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-#         return summary
-#     except Exception as e:
-#         print(f"Error summarizing Vietnamese text: {e}")
-#         return "Summarization unavailable."
-####
-  
-#### Step 4: Write Analysis Results
+def enhanced_summarize_text(text):
+    """
+    Generates an enhanced summary using a model with a higher token allowance (e.g., Longformer).
+    Note: Replace with your preferred long-document summarization model if available.
+    """
+    try:
+        print("Summarizing text with enhanced model (Longformer)...")
+        text = truncate_text_for_model(text, max_length=3500)  # Longformer can accept more tokens
+        summarization_model = pipeline("summarization", model="allenai/longformer-base-4096", tokenizer="allenai/longformer-base-4096")
+        summary = summarization_model(
+            text,
+            max_length=300,
+            min_length=50,
+            do_sample=False,
+            num_beams=4,
+        )
+        return summary[0]["summary_text"]
+    except Exception as e:
+        print(f"Error in enhanced summarization: {e}")
+        return summarize_text(text)  # Fallback to the standard summarizer
+
+##########################################
+# Writing Analysis Results               #
+##########################################
+
 output_file = "output_example.txt"
-# Write to external file (txt)
-def write_analysis(data, output_path):
-    """Writes analysis results into a structured output file."""
+
+# Write analysis to txt
+def write_analysis(data, output_path, sentiment, persuasive_contexts, summary, sentence_sentiment):
+    """Writes analysis results into an output file."""
     try:
         with open(output_path, "w", encoding="utf-8") as file:
-            print("Writes analysis in progress")
+            print("Writing analysis results...")
             for insight in data:
+                # Optionally remove tonal marks for English articles
                 processed_text = filter_text(insight.processed_text)
+                language = detect_language(processed_text)
+                if language == "en":
+                    processed_text = remove_tonal_marks(processed_text)
+                # Start writing
                 file.write("----\n")
                 file.write(f"Processed Text:\n{processed_text}\n\n")
-                # Sentiment Analysis
-                sentiment = insight.segmented_data.get("classifier_data", {})
+                # Sentiment chart section
                 file.write("Sentiment Analysis:\n")
                 file.write(f"  Positive: {sentiment.get('positive', 0) * 100:.2f}%\n")
                 file.write(f"  Negative: {sentiment.get('negative', 0) * 100:.2f}%\n\n")
-                # Key Phrase Extraction
-                key_phrases = extract_key_phrases(insight.processed_text)
+                # Key phrases section
+                key_phrases = extract_key_phrases(processed_text)
                 file.write("Key Phrases:\n")
                 file.write(f"{', '.join(key_phrases)}\n\n")
-                # Named Entity Recognition
+                # Named entities section
                 named_entities = perform_ner(processed_text)
                 cleaned_entities = filter_named_entities(named_entities)
                 file.write("Named Entities:\n")
                 for entity in cleaned_entities:
                     file.write(f"  {entity['word']} ({entity['entity']})\n")
-                file.write("\n\n")
-                # Persuasive Contexts
-                persuasive_contexts = extract_persuasive_contexts(processed_text)
+                file.write("\n")
+                # Persuasive context section
                 file.write("Persuasive Contexts:\n")
                 file.write("\n".join(persuasive_contexts) + "\n")
                 file.write("----\n\n")
-                # Summarization
-                summary = summarize_text(processed_text)
+                # Extreme negative content section
+                file.write("Extreme Negative Sentences:\n")
+                for s in sentence_sentiment["extreme_negative_sentences"]:
+                    file.write(f"  {s}\n")
+                file.write("----\n\n")
+                # Summary section
                 file.write("Summary:\n")
                 file.write(f"{summary}\n")
                 file.write("----\n\n")
         print(f"Results written to {output_path}")
     except Exception as e:
-        print(f"Error during analysis writing: {e}")
-####
+        print(f"Error writing analysis: {e}")
 
-# Main Execution
-output_file = "obsei_analysis.txt"
-# Flask Routes
+##########################################
+# Flask Routes                           #
+##########################################
+
 @app.route("/")
 def index():
     """Render the main HTML page."""
     return render_template("index.html")
+
 @app.route("/analyze", methods=["POST"])
 def main():
     url = request.form.get("url")
@@ -343,31 +410,38 @@ def main():
         return jsonify({"error": "No URL provided"}), 400
     try:
         raw_text = fetch_raw_content(url)
-        # If raw text (before applying configs) can be fetched
         if raw_text:
             detected_language = detect_language(raw_text)
+            # For English content, remove tonal marks from the raw text
+            if detected_language == "en":
+                raw_text = remove_tonal_marks(raw_text)
             data = fetch_cleaned_content(url, detected_language)
         else:
             print("Unable to fetch raw content for language detection.")
-            data = []  # Ensure `data` is always defined
-        # Check if data has valid content before proceeding
+            data = []
         if data:
+            # Split text into sentences using '.' and ';' as delimiters.
             analyzed_data = analyze_data(analyzer, data, analyzer_config)
             sentiment = analyzed_data[0].segmented_data.get("classifier_data", {})
-            # Extract insights with processing
+            # Analyse text
             analyzed_text = analyzed_data[0].processed_text
             processed_text = filter_text(analyzed_text)
+            if detected_language == "en":
+                processed_text = remove_tonal_marks(processed_text)
+            # Key phrases
             key_phrases = extract_key_phrases(processed_text)
             named_entities = perform_ner(processed_text)
             named_entities_cleaned = filter_named_entities(named_entities)
             persuasive_contexts = extract_persuasive_contexts(processed_text)
-            summary = summarize_text(processed_text)
-            # Write result to txt extension file
-            write_analysis(analyzed_data, output_file)
-            # Get sentiment data directly and fit to the json body sending to the frontend for pie-chart visualization
+            summary = enhanced_summarize_text(processed_text)
+            # Perform sentence-level sentiment analysis for more granular evaluation.
+            sentence_sentiment = analyze_sentence_sentiments(processed_text)
+            # Write result to file
+            write_analysis(analyzed_data, output_file, sentiment, persuasive_contexts, summary, sentence_sentiment)
+            
+            # Prepare JSON response (including extra field for extreme negative sentences)
             positive = sentiment.get("positive", 0) * 100
             negative = sentiment.get("negative", 0) * 100
-            # Prepare json body
             return jsonify({
                 "message": "Analysis complete",
                 "positive": positive,
@@ -376,6 +450,7 @@ def main():
                 "named_entities": [entity["word"] for entity in named_entities_cleaned],
                 "persuasive_contexts": persuasive_contexts,
                 "summary_contexts": summary,
+                "extreme_negative_sentences": sentence_sentiment["extreme_negative_sentences"],
                 "download_url": "/download"
             })
         else:
@@ -384,13 +459,11 @@ def main():
     except Exception as e:
         print(f"Error in /analyze: {e}")
         return jsonify({"error": str(e)}), 500
-    
-# Download routing 
+
 @app.route("/download", methods=["GET"])
 def download():
     """Download the analysis file."""
     return send_file(output_file, as_attachment=True, download_name="obsei_analysis.txt")
 
-# Run Flask App
 if __name__ == "__main__":
     app.run(debug=True, port=5002)

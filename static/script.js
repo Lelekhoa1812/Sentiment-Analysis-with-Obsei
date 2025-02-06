@@ -68,6 +68,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 console.log("Chart.js Data:", { positive: data.positive, negative: data.negative });
                 console.log("Sentiment Chart Canvas:", sentimentChartCanvas);
+                // Dynamic html tag for extreme negative sentence with content and score
+                const extremeNegativesHTML = data.extreme_negative_sentences
+                    .map(item => `${item.sentence} (${(item.score * 100).toFixed(2)}%)`)
+                    .join("<br>");
                 // Prepare dynamic html body when obtaining results
                 const resultHTML = `
                     <h3>Key Phrases</h3>
@@ -76,6 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p>${data.named_entities.join("<br>")}</p>
                     <h3>Persuasive Contexts</h3>
                     <p>${data.persuasive_contexts.join("<br>")}</p>
+                    <h3>Extreme Negative Contents</h3>
+                    <p>${extremeNegativesHTML}</p>
                     <h3>Summary Contexts</h3>
                     <p>${data.summary_contexts}</p>
                 `;
