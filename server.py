@@ -160,7 +160,7 @@ def analyze_sentence_sentiments(text, extreme_threshold=0.7):
             "label": label,
             "score": score
         }) 
-        print("Sentence List: ", sentence_result)
+        # print("Sentence List: ", sentence_result)
         # Append negative labels
         if label == "negative":
             negative_count += 1
@@ -364,8 +364,10 @@ def write_analysis(data, output_path, sentiment, persuasive_contexts, summary, s
                 file.write(f"Processed Text:\n{processed_text}\n\n")
                 # Sentiment chart section
                 file.write("Sentiment Analysis:\n")
-                file.write(f"  Positive: {sentiment.get('positive', 0) * 100:.2f}%\n")
-                file.write(f"  Negative: {sentiment.get('negative', 0) * 100:.2f}%\n\n")
+                # file.write(f"  Positive: {sentiment.get('positive', 0) * 100:.2f}%\n")
+                # file.write(f"  Negative: {sentiment.get('negative', 0) * 100:.2f}%\n\n")
+                file.write(f"  Positive: {sentence_sentiment['positive'] * 100:.2f}%\n")
+                file.write(f"  Negative: {sentence_sentiment['negative'] * 100:.2f}%\n\n")
                 # Key phrases section
                 key_phrases = extract_key_phrases(processed_text)
                 file.write("Key Phrases:\n")
@@ -444,8 +446,8 @@ def main():
             negative = sentiment.get("negative", 0) * 100
             return jsonify({
                 "message": "Analysis complete",
-                "positive": positive,
-                "negative": negative,
+                "positive": sentence_sentiment["positive"],
+                "negative": sentence_sentiment["negative"],
                 "key_phrases": key_phrases,
                 "named_entities": [entity["word"] for entity in named_entities_cleaned],
                 "persuasive_contexts": persuasive_contexts,

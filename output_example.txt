@@ -25,11 +25,11 @@ Longerterm questions about rebuilding and governance of the strip are supposed t
 According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israels bombardment could take 21 years and cost up to 1.2bn 980m. The WHO has said that restoring Gazas decimated medical infrastructure will cost 10bn, as only half of the strips 36 hospitals are still partially operating..
 
 Sentiment Analysis:
-  Positive: 50.07%
-  Negative: 49.93%
+  Positive: 3333.33%
+  Negative: 6666.67%
 
 Key Phrases:
-Israel, Gaza La, Rafah, West, Israeli, Gaza, Palestinian, La, Hamas, Ramallah, Gaza Netzarim Israel, Yesh
+Israel, Gaza La, West, Hamas, Gaza, Palestinian, Israeli, Yesh, Gaza Netzarim Israel, La, Ramallah, Rafah
 
 Named Entities:
   Palestinian (I-MISC)
@@ -58,6 +58,21 @@ The minimum number of trucks a day needed to contain the strips humanitarian cri
 ----
 
 Extreme Negative Sentences:
+  {'sentence': 'After the first night in  for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones', 'score': 0.8684019446372986}
+  {'sentence': '3 million population began to assess the scale of the devastation wreaked by  in retaliation for the 7 October 2023 Hamas attack', 'score': 0.8216890692710876}
+  {'sentence': 'Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons', 'score': 0.856478214263916}
+  {'sentence': 'Overnight, Israeli extremists set homes and cars on fire in three West Bank villages', 'score': 0.8299496173858643}
+  {'sentence': 'Whether the first sixweek stage of the ceasefire will hold is yet to be seen after isolated reports of violence on Monday, including what medics said was an incident in which Israeli troops shot eight people in the Rafah area', 'score': 0.7167021632194519}
+  {'sentence': 'Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and  by foot or using donkeydrawn carts on roads littered with unexploded ordnance', 'score': 0.7123205661773682}
+  {'sentence': 'The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble', 'score': 0.8934224843978882}
+  {'sentence': 'It is as if a Richter nine earthquake hit my city  There are no streets, no shops, no parks, no markets, no hospitals, or municipalities', 'score': 0.8528622388839722}
+  {'sentence': 'Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said', 'score': 0.8519909977912903}
+  {'sentence': 'About 1,200 people were killed in Hamass October 2023 attack, and 250 taken hostage', 'score': 0.7429498434066772}
+  {'sentence': 'Her home was completely gone, she said, adding that neighbours had already started digging through the debris in search of missing relatives believed to be buried in the rubble of Israeli airstrikes', 'score': 0.8716922998428345}
+  {'sentence': 'The local Kamal Adwan hospital was also completely destroyed, she said', 'score': 0.887965202331543}
+  {'sentence': 'Its no longer a hospital at all  They destroyed everything', 'score': 0.9254768490791321}
+  {'sentence': 'About half of the deliveries were taken to northern Gaza, which Israel has almost completely cut off from the outside world', 'score': 0.755510151386261}
+  {'sentence': 'Israel denies it has deliberately strangled aid supplies to the Palestinian territory, blaming aid agencies for delays and claiming Hamas siphons off deliveries', 'score': 0.9078037738800049}
 ----
 
 Summary:
