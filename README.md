@@ -245,7 +245,6 @@ python server.py
 - The server will run on your 5002 port http://127.0.0.1:5002.
 
 - Web Demo:  
-<img src="imgsrc/obsei_chart.png" alt="Obsei Sentiment Chart" style="width: 80%; max-width: 1000px;"> 
 
 <img src="imgsrc/obsei_text1.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
 
