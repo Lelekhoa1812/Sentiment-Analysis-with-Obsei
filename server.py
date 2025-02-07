@@ -316,44 +316,65 @@ GOOGLE_FACT_CHECK_API_KEY = os.getenv("GFC_API_KEY")
 if not GOOGLE_FACT_CHECK_API_KEY:
     raise ValueError("❌ Google Fact Check API key is missing! Add it to .env file or environment variables.")
 
-def extract_key_facts(sentence):
+def extract_key_facts(sentence, key_phrases=None):
     """
-    Extracts key factual phrases from the sentence by capturing segments that include numbers
-    along with some of the following words. For example, from:
-      "medics reported 62 bodies were found over the past 24 hours, bringing the number of dead to 47,000."
-    it might extract phrases such as:
-      ["62 bodies", "the past 24 hours", "number of dead to 47,000"]
-    Adjust the regex as needed for your domain.
+    Extracts key factual segments from the sentence.
+    First, it uses a regex to capture segments that start with a number
+    (with optional commas) and include up to 7 following tokens.
+    Then, if a list of key_phrases is provided, it also searches for each key
+    phrase in the sentence and extracts up to 7 non-space tokens before and after
+    the key phrase.
+    Returns a list of extracted key facts (duplicates are removed).
     """
-    # This regex looks for a number (with optional commas) followed by up to 7 non-space tokens.
-    matches = re.findall(r'(\d[\d,]*(?:\s+\S+){0,7})', sentence)
-    # Only keep matches that contain more than one word
-    key_facts = [match.strip() for match in matches if len(match.split()) > 1]
+    key_facts = []
+    # Extract numeric facts using regex
+    numeric_matches = re.findall(r'(\d[\d,]*(?:\s+\S+){0,7})', sentence)
+    for match in numeric_matches:
+        if len(match.split()) > 1:
+            key_facts.append(match.strip())
+    # If key_phrases are provided, extract contextual segments for each phrase.
+    if key_phrases:
+        for phrase in key_phrases:
+            # Build a regex pattern to capture up to 7 tokens before and after the key phrase.
+            # The pattern breaks down as:
+            #   ((?:\S+\s+){0,7})   --> Capture up to 7 tokens before
+            #   (re.escape(phrase)) --> The key phrase (escaped for regex safety)
+            #   ((?:\s+\S+){0,7})   --> Capture up to 7 tokens after
+            pattern = r'((?:\S+\s+){0,7})(' + re.escape(phrase) + r')((?:\s+\S+){0,7})'
+            for match in re.finditer(pattern, sentence, flags=re.IGNORECASE):
+                before = match.group(1).strip()
+                mid = match.group(2).strip()
+                after = match.group(3).strip()
+                # Concatenate the tokens (if available) with the key phrase in the middle.
+                fact_context = (before + " " if before else "") + mid + (" " + after if after else "")
+                key_facts.append(fact_context.strip())
+    # Remove duplicate entries
+    key_facts = list(set(key_facts))
     return key_facts
-
 
 def fact_check_sentence(sentence, key_phrases=None, api_key=GOOGLE_FACT_CHECK_API_KEY):
     """
     Fact-checks a given sentence using the Google Fact Check Tools API.
-    This function sends the sentence as a query to the API and returns True if any
-    fact-checked claims are returned; otherwise, it returns False.
+    Instead of simply joining the key phrases with the sentence,
+    this function extracts key facts using `extract_key_facts()`, which
+    captures both numeric segments and the context surrounding any key phrases
+    (up to 7 non-space tokens before and after).
+    The resulting extracted text is URL-encoded and sent as the query to the API.
+    If any fact-checked claims are returned, the function returns True;
+    otherwise, it returns False.
     """
-    # Extract key facts from the sentence
-    key_facts = extract_key_facts(sentence)
-    # Combine key facts and article context (if any)
-    context = " ".join(key_phrases) if key_phrases else ""
+    # Extract key facts from the sentence using the provided key phrases for context.
+    key_facts = extract_key_facts(sentence, key_phrases=key_phrases)
+    # Build the query string by joining the extracted segments.
     query_str = " ".join(key_facts)
-    if context:
-        query_str += " " + context
-    # URL-encode the key fact extracted for use in the query string
+    # URL-encode the query string
     query = requests.utils.quote(query_str)
     url = f"https://factchecktools.googleapis.com/v1alpha1/claims:search?query={query}&key={api_key}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            print("Keyfact: ", query_str, True if "claims" in data and data["claims"] else False)
-            # If the API returns any claims, we consider that as evidence of fact-checking.
+            print("Keyfact query:", query_str, True if "claims" in data and data["claims"] else False)
             return True if "claims" in data and data["claims"] else False
         else:
             print(f"Fact Check API error: {response.status_code} - {response.text}")
