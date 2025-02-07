@@ -141,7 +141,7 @@ def analyze_data(analyzer, data, config):
         return []
 
 # Process big data, split and collect analysis
-def analyze_sentence_sentiments(text, extreme_threshold=0.7):
+def analyze_sentence_sentiments(text, article_key_phrases=None, extreme_threshold=0.8):
     """
     Splits the text into sentences (using '.' and ';' as delimiters),
     performs sentiment analysis on each sentence individually,
@@ -152,8 +152,9 @@ def analyze_sentence_sentiments(text, extreme_threshold=0.7):
     total_sentences = 0
     positive_count = 0
     negative_count = 0
+    neutral_count = 0
     extreme_negative_sentences = []
-    sentence_result = []
+    sentence_result = [] # To debug
     # Use the sentiment analysis pipeline for individual sentences.
     sentence_sentiment_model = pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
     for sentence in sentences:
@@ -175,22 +176,26 @@ def analyze_sentence_sentiments(text, extreme_threshold=0.7):
             negative_count += 1
             if score >= extreme_threshold:
                 # Fact-check the extreme negative sentences using Google Fact Check API.
-                is_fact = fact_check_sentence(sentence)
+                is_fact = fact_check_sentence(sentence, key_phrases=article_key_phrases)
                 # Store the sentence and its negative score post fact-checking
                 extreme_negative_sentences.append({
                     "sentence": sentence,
                     "score": score,
                     "is_fact": is_fact
                 })        
-        else:
+        elif label == "positive":
             positive_count += 1
+        elif label == "neutral":
+            neutral_count += 1
     # Compute overall pos/neg percentage
     positive_percent = (positive_count / total_sentences) * 100 if total_sentences else 0
+    neutral_percent = (neutral_count / total_sentences) * 100 if total_sentences else 0
     negative_percent = (negative_count / total_sentences) * 100 if total_sentences else 0
-    # Return percentage level computed in overall and list of extreme negative sentences
+    # Return percentage (4dp) level computed in overall and list of extreme negative sentences
     return {
-        "positive": positive_percent,
-        "negative": negative_percent,
+        "positive": round(positive_percent, 4),
+        "negative": round(negative_percent, 4),
+        "neutral": round(neutral_percent, 4),
         "extreme_negative_sentences": extreme_negative_sentences
     }
 
@@ -311,19 +316,43 @@ GOOGLE_FACT_CHECK_API_KEY = os.getenv("GFC_API_KEY")
 if not GOOGLE_FACT_CHECK_API_KEY:
     raise ValueError("❌ Google Fact Check API key is missing! Add it to .env file or environment variables.")
 
-def fact_check_sentence(sentence, api_key=GOOGLE_FACT_CHECK_API_KEY):
+def extract_key_facts(sentence):
+    """
+    Extracts key factual phrases from the sentence by capturing segments that include numbers
+    along with some of the following words. For example, from:
+      "medics reported 62 bodies were found over the past 24 hours, bringing the number of dead to 47,000."
+    it might extract phrases such as:
+      ["62 bodies", "the past 24 hours", "number of dead to 47,000"]
+    Adjust the regex as needed for your domain.
+    """
+    # This regex looks for a number (with optional commas) followed by up to 7 non-space tokens.
+    matches = re.findall(r'(\d[\d,]*(?:\s+\S+){0,7})', sentence)
+    # Only keep matches that contain more than one word
+    key_facts = [match.strip() for match in matches if len(match.split()) > 1]
+    return key_facts
+
+
+def fact_check_sentence(sentence, key_phrases=None, api_key=GOOGLE_FACT_CHECK_API_KEY):
     """
     Fact-checks a given sentence using the Google Fact Check Tools API.
     This function sends the sentence as a query to the API and returns True if any
     fact-checked claims are returned; otherwise, it returns False.
     """
-    # URL-encode the sentence for use in the query string
-    query = requests.utils.quote(sentence)
+    # Extract key facts from the sentence
+    key_facts = extract_key_facts(sentence)
+    # Combine key facts and article context (if any)
+    context = " ".join(key_phrases) if key_phrases else ""
+    query_str = " ".join(key_facts)
+    if context:
+        query_str += " " + context
+    # URL-encode the key fact extracted for use in the query string
+    query = requests.utils.quote(query_str)
     url = f"https://factchecktools.googleapis.com/v1alpha1/claims:search?query={query}&key={api_key}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
+            print("Keyfact: ", query_str, True if "claims" in data and data["claims"] else False)
             # If the API returns any claims, we consider that as evidence of fact-checking.
             return True if "claims" in data and data["claims"] else False
         else:
@@ -414,8 +443,8 @@ def write_analysis(data, output_path, sentiment, persuasive_contexts, summary, s
                 file.write("Sentiment Analysis:\n")
                 # file.write(f"  Positive: {sentiment.get('positive', 0) * 100:.2f}%\n")
                 # file.write(f"  Negative: {sentiment.get('negative', 0) * 100:.2f}%\n\n")
-                file.write(f"  Positive: {sentence_sentiment['positive'] * 100:.2f}%\n")
-                file.write(f"  Negative: {sentence_sentiment['negative'] * 100:.2f}%\n\n")
+                file.write(f"  Positive: {sentence_sentiment['positive']:.2f}%\n")
+                file.write(f"  Negative: {sentence_sentiment['negative']:.2f}%\n\n")
                 # Key phrases section
                 key_phrases = extract_key_phrases(processed_text)
                 file.write("Key Phrases:\n")
@@ -486,10 +515,10 @@ def main():
             persuasive_contexts = extract_persuasive_contexts(processed_text)
             summary = enhanced_summarize_text(processed_text)
             # Perform sentence-level sentiment analysis for more granular evaluation.
-            sentence_sentiment = analyze_sentence_sentiments(processed_text)
+            sentence_sentiment = analyze_sentence_sentiments(processed_text, article_key_phrases=key_phrases)
             # Write result to file
             write_analysis(analyzed_data, output_file, sentiment, persuasive_contexts, summary, sentence_sentiment)
-            # Prepare JSON response (including extreme negative sentences has been fact checked)
+            # Prepare JSON response (including extreme negative sentences has been fact checked) - Removed since not using Facebook model anymore
             # positive = sentiment.get("positive", 0) * 100
             # negative = sentiment.get("negative", 0) * 100
             return jsonify({
@@ -497,6 +526,7 @@ def main():
                 "language": detected_language,
                 "positive": sentence_sentiment["positive"],
                 "negative": sentence_sentiment["negative"],
+                "neutral": sentence_sentiment["neutral"],
                 "key_phrases": key_phrases,
                 "named_entities": [entity["word"] for entity in named_entities_cleaned],
                 "persuasive_contexts": persuasive_contexts,

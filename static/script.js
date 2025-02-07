@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 // Initialize sentiment analysis pie chart with canvas
                 const ctx = sentimentChartCanvas?.getContext("2d");
+                sentimentChartCanvas.width = sentimentChartCanvas.width; // Reset canvas dimensions to clear it
                 // Catching error for invalid context or issue with chart rendering
                 if (!ctx) {
                     console.error("Canvas context not found.");
@@ -59,19 +60,41 @@ document.addEventListener("DOMContentLoaded", function () {
                     new Chart(ctx, {
                         type: "pie",
                         data: {
-                            labels: ["Positive", "Negative"],
+                            labels: ["Positive", "Negative", "Neutral"],
                             datasets: [{
                                 label: "Sentiment",
-                                data: [data.positive, data.negative],
-                                backgroundColor: ["#009999", "#dc3545"],
+                                data: [data.positive, data.negative, data.neutral],
+                                backgroundColor: ["#009999", "#dc3545", "#e5ce20"],
                             }],
+                        },
+                        // Add tooltip reflecting message to sentiment state
+                        options: {
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            const sentiment = context.label;
+                                            const value = context.raw.toFixed(2);
+                                            let description = "";
+                                            if (sentiment === "Positive") {
+                                                description = "Positive sentiment indicating a favorable context.";
+                                            } else if (sentiment === "Negative") {
+                                                description = "Negative sentiment suggesting an unfavorable context.";
+                                            } else if (sentiment === "Neutral") {
+                                                description = "Neutral sentiment indicating a balanced or mixed context.";
+                                            }
+                                            return `${sentiment}: ${value}% - ${description}`;
+                                        },
+                                    },
+                                },
+                            },
                         },
                     });
                 } catch (chartError) {
                     console.error("Error initializing the chart:", chartError);
                     alert("Failed to render the chart. Please try again.");
                 }
-                console.log("Chart.js Data:", { positive: data.positive, negative: data.negative });
+                console.log("Chart.js Data:", { positive: data.positive, negative: data.negative, neutral: data.neutral });
                 console.log("Sentiment Chart Canvas:", sentimentChartCanvas);
                 // Dynamic html tag for extreme negative sentence with content and score
                 const extremeNegativesHTML = data.extreme_negative_sentences

@@ -1,6 +1,6 @@
 # **Sentiment Analysis with Obsei**
 
-This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis (by model **distilbert-base-multilingual-cased**), named entity recognition (NER model **bert-base-NER**), fact-checking (Google Fact Check API), and summarization (facebook model **bart-large-cnn**). It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
+This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis (by model **twitter-xlm-roberta-base-sentiment** and **distilbert-base-multilingual-cased**), named entity recognition (NER model **bert-base-NER**), fact-checking (Google Fact Check API), and summarization (facebook model **bart-large-cnn**). It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
 
 ---
 
@@ -26,7 +26,7 @@ This project leverages the **Obsei framework** alongside **Hugging Face Transfor
 
 ### **What is [Obsei](https://www.obsei.com/)?**
 
-**Obsei** (Observability for Sentiment and Insights Extraction) is an open-source, modular framework designed to simplify data extraction, processing, and analysis. It allows developers to create highly customizable NLP pipelines for sentiment analysis, summarization, keyword detection, and more.
+**Obsei** (Observability for Sentiment and Insights Extraction) is an open-source, modular framework designed to simplify data extraction, processing, and analysis. It allows developers to create highly customizable NLP pipelines for sentiment analysis, summarization, keyword detection, and more 📊.
 
 Its **pluggable architecture** integrates seamlessly with various data sources (e.g., websites, social media, or APIs) and outputs processed insights to desired destinations like dashboards, databases, or messaging systems.
 
