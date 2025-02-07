@@ -23,18 +23,42 @@ from transformers import pipeline
 # Summary specific model for summary and Vietnamese language
 from transformers import MBartForConditionalGeneration, MBartTokenizer  # mBART for summarization
 from transformers import MBart50Tokenizer # mBART50 for multilingual integration
+# Saving data to MongoDB
+import datetime
+from pymongo import MongoClient
 
 app = Flask(__name__)
+
+# Global variable to temporarily store the latest analysis result (used to save JSON to MongoDB)
+latest_analysis = {} 
 
 # Using Web Crawler with TrafilaturaClawler to directly observing data from a website url
 # url = "https://vnexpress.net/tong-thong-my-chua-ap-thue-trung-quoc-trong-ngay-dau-nhiem-ky-4841410.html" # Random sample of Vietnamese (vi) article URL
 # url = "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes" # Random sample of English (en) article URL
 # url = "https://www.marca.com/futbol/real-madrid/2025/02/05/real-madrid-acude-tribunales-obtener-videos-var-jugada-mbappe.html" # Random sample of Spanish (es) article URL
 crawler_source = TrafilaturaCrawlerSource()
-
+load_dotenv()  # Load all environment variables from .env file
 
 ##########################################
-# Helper Functions for Text Preprocessing #
+# Initialise MongoDB with environment    #
+##########################################
+
+MONGO_URI = os.getenv("MONGO_URI")
+if not MONGO_URI:
+    raise ValueError("❌ MongoDB URI (MONGO_URI) is missing! Please add it to your .env file.")
+client = MongoClient(MONGO_URI)
+import re  # (if not already imported)
+def get_db_for_url(article_url):
+    """
+    Returns a MongoDB database whose name is derived from the article URL.
+    Non-alphanumeric characters are replaced with underscores.
+    """
+    # Remove protocol (e.g., 'https://') and replace any non-word character with underscore.
+    sanitized = re.sub(r'\W+', '_', article_url)
+    return client[sanitized]
+
+##########################################
+# Functions for Text Preprocessing       #
 ##########################################
 
 def remove_tonal_marks(text):
@@ -181,7 +205,7 @@ def analyze_sentence_sentiments(text, article_key_phrases=None, extreme_threshol
                 extreme_negative_sentences.append({
                     "sentence": sentence,
                     "score": score,
-                    "is_fact": is_fact
+                    "is_fact": str(is_fact) # Convert `True`/`False` to string
                 })        
         elif label == "positive":
             positive_count += 1
@@ -310,7 +334,6 @@ def extract_persuasive_contexts(text):
 # Fact Checking Tool Function            #
 ##########################################
 
-load_dotenv()  # Load environment variables from .env file
 GOOGLE_FACT_CHECK_API_KEY = os.getenv("GFC_API_KEY")
 # Check for OpenAI API key exist
 if not GOOGLE_FACT_CHECK_API_KEY:
@@ -367,6 +390,9 @@ def fact_check_sentence(sentence, key_phrases=None, api_key=GOOGLE_FACT_CHECK_AP
     key_facts = extract_key_facts(sentence, key_phrases=key_phrases)
     # Build the query string by joining the extracted segments.
     query_str = " ".join(key_facts)
+    if not query_str:
+        print("Empty query string generated; skipping fact check.")
+        return None
     # URL-encode the query string
     query = requests.utils.quote(query_str)
     url = f"https://factchecktools.googleapis.com/v1alpha1/claims:search?query={query}&key={api_key}"
@@ -374,14 +400,14 @@ def fact_check_sentence(sentence, key_phrases=None, api_key=GOOGLE_FACT_CHECK_AP
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            print("Keyfact query:", query_str, True if "claims" in data and data["claims"] else False)
+            # print("Keyfact query:", query_str, True if "claims" in data and data["claims"] else False)
             return True if "claims" in data and data["claims"] else False
         else:
             print(f"Fact Check API error: {response.status_code} - {response.text}")
-            return False
+            return None
     except Exception as e:
         print(f"Error during fact check API call: {e}")
-        return False
+        return None
 
 
 ##########################################
@@ -542,8 +568,9 @@ def main():
             # Prepare JSON response (including extreme negative sentences has been fact checked) - Removed since not using Facebook model anymore
             # positive = sentiment.get("positive", 0) * 100
             # negative = sentiment.get("negative", 0) * 100
-            return jsonify({
-                "message": "Analysis complete",
+            # Prepare the JSON result to be sent to the frontend.
+            analysis_result = {
+                "article_url": url, 
                 "language": detected_language,
                 "positive": sentence_sentiment["positive"],
                 "negative": sentence_sentiment["negative"],
@@ -552,9 +579,13 @@ def main():
                 "named_entities": [entity["word"] for entity in named_entities_cleaned],
                 "persuasive_contexts": persuasive_contexts,
                 "summary_contexts": summary,
-                "extreme_negative_sentences": sentence_sentiment["extreme_negative_sentences"],
-                "download_url": "/download"
-            })
+                "extreme_negative_sentences": sentence_sentiment["extreme_negative_sentences"]
+            }
+            # Store the analysis result in a global variable for later saving (e.g., save to DB).
+            global latest_analysis
+            latest_analysis = analysis_result
+            # Send json result object
+            return jsonify(analysis_result)
         else:
             print("No data available for analysis.")
             return jsonify({"error": "No data available for analysis"}), 500
@@ -562,10 +593,41 @@ def main():
         print(f"Error in /analyze: {e}")
         return jsonify({"error": str(e)}), 500
 
+# Download txt file route
 @app.route("/download", methods=["GET"])
 def download():
     """Download the analysis file."""
     return send_file(output_file, as_attachment=True, download_name="obsei_analysis.txt")
+
+# Save data to MongoDB route
+@app.route("/save", methods=["GET"])
+def save_to_db():
+    """
+    Saves the latest analysis result (JSON) to MongoDB.
+    The saved document will include all the fields from the analysis result along with a UTC timestamp.
+    """
+    global latest_analysis
+    if not latest_analysis:
+        return jsonify({"error": "No analysis data available to save."}), 400
+    article_url = latest_analysis.get("article_url")
+    if not article_url:
+        return jsonify({"error": "No article URL found in analysis."}), 400
+    try:
+        # Use the helper function to get a database using the article URL.
+        db = get_db_for_url(article_url)
+        collection = db.analysis  # Use a fixed collection name (e.g., "analysis")
+        # Create a document from the latest analysis data and add a timestamp.
+        doc = latest_analysis.copy()
+        doc["timestamp"] = datetime.datetime.utcnow()
+        result = collection.insert_one(doc)
+        return jsonify({
+            "message": "Analysis saved to MongoDB",
+            "id": str(result.inserted_id)
+        })
+    except Exception as e:
+        print(f"Error saving analysis to MongoDB: {e}")
+        return jsonify({"error": f"Failed to save analysis to MongoDB: {str(e)}"}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5002)

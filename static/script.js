@@ -39,6 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: `url=${encodeURIComponent(urlInput)}`,
             });
+            if (sentimentChart) { // Double checking removal of chart
+                console.error("Previous sentiment chart is found and so will be destroyed.");
+                sentimentChart.destroy();
+            }
             // Await and prepare json body for the response
             const data = await response.json();
             loader.classList.add("hidden");
@@ -46,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 // Destroy existing chart if it exists
                 if (sentimentChart) {
+                    console.error("Previous sentiment chart is found and so will be destroyed.");
                     sentimentChart.destroy();
                 }
                 // Initialize sentiment analysis pie chart with canvas

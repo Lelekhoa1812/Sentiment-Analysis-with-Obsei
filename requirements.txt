@@ -4,6 +4,7 @@ sentencepiece>=0.1.96
 obsei>=0.0.13
 trafilatura>=0.9.0
 langdetect
+pymongo
 
 # Optionals:
 tokenizers>=0.13.0

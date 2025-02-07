@@ -95,3 +95,16 @@ button:hover {
 #downloadBtn:hover {
     background-color: #880000;
 }
+#saveBtn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #5c1769;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+#saveBtn:hover {
+    background-color: #880000;
+}

@@ -30,7 +30,7 @@ Sentiment Analysis:
   Negative: 65.79%
 
 Key Phrases:
-Palestinian, West, Israel, Palestinians, Hamas, Saraya, Gaza Net Israel, Gaza, Israeli, Yesh, La, Rah, Ramallah, Gaza La, Times
+Israel, Palestinian, Saraya, Gaza Net Israel, Yesh, Rah, Palestinians, Gaza, Israeli, La, Times, Hamas, West, Ramallah, Gaza La
 
 Named Entities:
   Palestinians Gaza (I-MISC)
@@ -63,17 +63,17 @@ The minimum number of trucks a day needed to contain the strips humanitarian cri
 ----
 
 Extreme Negative Sentences:
-  {'sentence': 'Palestinians begin search for Gazas missing as they return to ruined homes\nCeasefire celebrations replaced by shock and sorrow as people begin to assess the scale of devastation\nAfter the first night in Gaza for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones', 'score': 0.8421633243560791, 'is_fact': False}
-  {'sentence': '3 million population began to assess the scale of the devastation wreaked by Israel in retaliation for the 7 October 2023 Hamas attack', 'score': 0.8347379565238953, 'is_fact': False}
-  {'sentence': 'Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons', 'score': 0.8564781546592712, 'is_fact': False}
-  {'sentence': 'Overnight, Israeli extremists set homes and cars on fire in three West Bank villages', 'score': 0.8299496173858643, 'is_fact': False}
-  {'sentence': 'The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble', 'score': 0.8934224843978882, 'is_fact': False}
-  {'sentence': 'It is as if a Richter nine earthquake hit my city  There are no streets, no shops, no parks, no markets, no hospitals, or municipalities', 'score': 0.8528622388839722, 'is_fact': False}
-  {'sentence': 'Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said', 'score': 0.8519909977912903, 'is_fact': False}
-  {'sentence': 'Her home was completely gone, she said, adding that neighbours had already started digging through the debris in search of missing relatives believed to be buried in the rubble of Israeli airstrikes', 'score': 0.8716922998428345, 'is_fact': False}
-  {'sentence': 'The local Kamal Adwan hospital was also completely destroyed, she said', 'score': 0.887965202331543, 'is_fact': False}
-  {'sentence': 'Its no longer a hospital at all  They destroyed everything', 'score': 0.9254767298698425, 'is_fact': False}
-  {'sentence': 'Israel denies it has deliberately strangled aid supplies to the Palestinian territory, blaming aid agencies for delays and claiming Hamas siphons off deliveries', 'score': 0.9078037738800049, 'is_fact': False}
+  {'sentence': 'Palestinians begin search for Gazas missing as they return to ruined homes\nCeasefire celebrations replaced by shock and sorrow as people begin to assess the scale of devastation\nAfter the first night in Gaza for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones', 'score': 0.8421633243560791, 'is_fact': 'False'}
+  {'sentence': '3 million population began to assess the scale of the devastation wreaked by Israel in retaliation for the 7 October 2023 Hamas attack', 'score': 0.8347379565238953, 'is_fact': 'False'}
+  {'sentence': 'Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons', 'score': 0.8564781546592712, 'is_fact': 'False'}
+  {'sentence': 'Overnight, Israeli extremists set homes and cars on fire in three West Bank villages', 'score': 0.8299496173858643, 'is_fact': 'False'}
+  {'sentence': 'The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble', 'score': 0.8934224843978882, 'is_fact': 'False'}
+  {'sentence': 'It is as if a Richter nine earthquake hit my city  There are no streets, no shops, no parks, no markets, no hospitals, or municipalities', 'score': 0.8528622388839722, 'is_fact': 'None'}
+  {'sentence': 'Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said', 'score': 0.8519909977912903, 'is_fact': 'False'}
+  {'sentence': 'Her home was completely gone, she said, adding that neighbours had already started digging through the debris in search of missing relatives believed to be buried in the rubble of Israeli airstrikes', 'score': 0.8716922998428345, 'is_fact': 'False'}
+  {'sentence': 'The local Kamal Adwan hospital was also completely destroyed, she said', 'score': 0.887965202331543, 'is_fact': 'None'}
+  {'sentence': 'Its no longer a hospital at all  They destroyed everything', 'score': 0.9254767298698425, 'is_fact': 'None'}
+  {'sentence': 'Israel denies it has deliberately strangled aid supplies to the Palestinian territory, blaming aid agencies for delays and claiming Hamas siphons off deliveries', 'score': 0.9078037738800049, 'is_fact': 'False'}
 ----
 
 Summary:
