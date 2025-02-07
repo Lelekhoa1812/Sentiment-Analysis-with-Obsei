@@ -1,6 +1,6 @@
 # **Sentiment Analysis with Obsei**
 
-This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis (by model distilbert-base-multilingual-cased), named entity recognition (NER model bert-base-NER by dslim), and summarization (facebook model bart-large-cnn). It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
+This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis (by model **distilbert-base-multilingual-cased**), named entity recognition (NER model **bert-base-NER**), fact-checking (Google Fact Check API), and summarization (facebook model **bart-large-cnn**). It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
 
 ---
 
@@ -92,9 +92,14 @@ Obsei operates through three core components:
   - Sequence-to-sequence frameworks (e.g., `BART`) encode and decode text into summaries.
 
 ### **Technologies**
-- **Hugging Face Transformers**: Provides state-of-the-art NLP models.
-- **Trafilatura**: Handles web scraping and content cleaning.
-- **Python Pipelines**: Orchestrates data flow seamlessly.
++ **Hugging Face Transformers**: Provides state-of-the-art NLP models. Transformer models work by processing input data, which can be sequences of tokens or other structured data, through a series of layers that contain self-attention mechanisms and feed-forward neural networks.  
+<img src="imgsrc/transformer_models.svg" alt="Transformer model evaluation" style="width: 80%; max-width: 1000px;">    
+
++ **Trafilatura**: Handles web scraping and content cleaning. Trafilatura scrapes the main text of web pages while preserving some structure, a task which is also known as boilerplate removal, DOM-based content extraction, main content identification, or HTML text cleaning. The result of processing can be in TXT, CSV, JSON & XML formats. Find more on [Trafilatura Document](https://trafilatura.readthedocs.io/en/latest/quickstart.html).
+
++ **Google Fact Check**: Fact checking assigned statements on real-time data for enhanced information credibility. This tool using creates, adds, and deletes ClaimReview markup for a site's fact-checking articles, URLs or simply a short statement. Find more on [Google Fact Check Document](https://newsinitiative.withgoogle.com/resources/trainings/google-fact-check-tools/)
+
++ **Python Pipelines**: Orchestrates data flow seamlessly.
 
 ---
 
@@ -127,9 +132,9 @@ Obsei operates through three core components:
 ### **Step-by-Step Workflow**
 
 1. **Data Collection**:
-   - Extracts data from specified sources (e.g., web articles, tweets).
+   - Extracts data from specified sources (e.g., web articles, tweets) using web scrapper.
 2. **Language Detection**:
-   - Determines the language of the input text dynamically.
+   - Determines the language of the input text dynamically. Thus assigning and integrating across different destined LLM model.
 3. **Data Analysis**:
    - Processes text using transformers for sentiment classification, NER, and summarization.
 4. **Output Routing**:
@@ -269,4 +274,4 @@ This project was developed as part of an internship product for **iNet Solution*
 
 ---
 
-Latest update on 22/01/2025. Author: Dang Khoa Le.
+Latest update on 07/02/2025. Author: Dang Khoa Le.
