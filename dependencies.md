@@ -1,11 +1,11 @@
 `pip install --editable .[all]`
 **Note**: all option will install all the dependencies which might not be needed for your workflow, alternatively following options are available to install minimal dependencies as per need:  
 
-`pip install obsei[source]`: To install dependencies related to all observers.  
+`pip install obsei\[source\]`: To install dependencies related to all observers.  
 
-`pip install obsei[sink]`: To install dependencies related to all informers.  
+`pip install obsei\[sink\]`: To install dependencies related to all informers.  
 
-`pip install obsei[analyzer]`: To install dependencies related to all analyzers, it will install pytorch as well.  
+`pip install obsei\[analyzer\]`: To install dependencies related to all analyzers, it will install pytorch as well.  
 
 `pip install obsei[twitter-api]`: To install dependencies related to Twitter observer.  
 

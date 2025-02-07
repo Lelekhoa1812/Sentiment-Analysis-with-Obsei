@@ -1,6 +1,6 @@
 # **Sentiment Analysis with Obsei**
 
-This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis, named entity recognition (NER), and summarization. It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
+This project leverages the **Obsei framework** alongside **Hugging Face Transformers** to analyze text data by performing sentiment analysis (by model distilbert-base-multilingual-cased), named entity recognition (NER model bert-base-NER by dslim), and summarization (facebook model bart-large-cnn). It combines cutting-edge Natural Language Processing (NLP) techniques with customizable pipelines, delivering actionable insights for various business and strategic needs.
 
 ---
 
@@ -173,7 +173,7 @@ Or downloading each tools individually via [Obsei associated dependencies](https
 ### **2. Install Dependencies**
 Install requirements for this project:  
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ### **3. Run the Script**
