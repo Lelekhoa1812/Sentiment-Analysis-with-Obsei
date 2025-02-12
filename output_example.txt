@@ -1,15 +1,14 @@
 ----
 Processed Text:
-Palestinians begin search for Gazas missing as they return to ruined homes
-Ceasefire celebrations replaced by shock and sorrow as people begin to assess the scale of devastation
-After the first night in Gaza for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones.
-By Monday, however, the celebrations largely gave way to shock and sorrow, as the strips 2.3 million population began to assess the scale of the devastation wreaked by Israel in retaliation for the 7 October 2023 Hamas attack.
+After the first night in  for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones.
+The truce that took effect on Sunday with the  held by Hamas in exchange for  was greeted with euphoria as a large influx of desperately needed aid supplies entered the strip.
+By Monday, however, the celebrations largely gave way to shock and sorrow, as the strips 2.3 million population began to assess the scale of the devastation wreaked by  in retaliation for the 7 October 2023 Hamas attack.
 In Israel, joy at the three hostages safe return was tempered by anger and surprise at Hamass show of force at the hostage handover after 15 months of gruelling combat.
-The nation watched with no little dread when dozens of Hamas gunmen, hailed by a large cheering crowd, commandeered Gaza Citys Saraya Square for a wild, selfaggrandising daylight ceremony before a vast global audience, a Times of Israel oped said.
+The nation watched with no little dread when dozens of Hamas gunmen, hailed by a large cheering crowd, commandeered Gaza Citys Saraya Square for a wild, selfaggrandising daylight ceremony before a vast global audience, a  oped said.
 Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons.
 Overnight, Israeli extremists set homes and cars on fire in three West Bank villages. In a statement, the Israel Defense Forces said it acted swiftly to disperse rioters, arresting two people, a claim disputed by the human rights organisation Yesh Din.
 Whether the first sixweek stage of the ceasefire will hold is yet to be seen after isolated reports of violence on Monday, including what medics said was an incident in which Israeli troops shot eight people in the Rafah area. The Israeli military said it was checking the reports.
-Gaza is still cut in two by the Netzarim corridor, which Israel installed below Gaza City, and the Israeli military is not expected to begin withdrawing from the area until day seven of the truce. Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and refugee camps, by foot or using donkeydrawn carts on roads littered with unexploded ordnance.
+Gaza is still cut in two by the Netzarim corridor, which Israel installed below Gaza City, and the Israeli military is not expected to begin withdrawing from the area until day seven of the truce. Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and  by foot or using donkeydrawn carts on roads littered with unexploded ordnance.
 Youssef, 22, from the northern city of Beit Lahia, who lost his parents and brother during the war, returned from Gaza City to his home on Monday.
 The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble. It is as if a Richter nine earthquake hit my city  There are no streets, no shops, no parks, no markets, no hospitals, or municipalities. There is nothing but rubble, and some corpses around and under it, he said.
 He later went back to Gaza City. I plan to return only when there is an environment for human living  water, food, medical services and infrastructure so we can start our lives again, he said.
@@ -26,22 +25,18 @@ Longerterm questions about rebuilding and governance of the strip are supposed t
 According to a UN damage assessment from earlier this month, clearing more than 50m tonnes of rubble left from Israels bombardment could take 21 years and cost up to 1.2bn 980m. The WHO has said that restoring Gazas decimated medical infrastructure will cost 10bn, as only half of the strips 36 hospitals are still partially operating..
 
 Sentiment Analysis:
-  Positive: 2.63%
-  Negative: 65.79%
+  Positive: 2.56%
+  Negative: 66.67%
 
 Key Phrases:
-Israel, Palestinian, Saraya, Gaza Net Israel, Yesh, Rah, Palestinians, Gaza, Israeli, La, Times, Hamas, West, Ramallah, Gaza La
+Israel, Yesh, Gaza Netzarim Israel, West, Rafah, La, Hamas, Palestinian, Gaza La, Israeli, Gaza, Ramallah
 
 Named Entities:
-  Palestinians Gaza (I-MISC)
-  Gaza (I-LOC)
   Palestinian (I-MISC)
-  Israel (I-LOC)
   Hamas (I-ORG)
   Israel (I-LOC)
   Hamas (I-ORG)
   Gaza City Saraya Square (I-LOC)
-  Times of Israel (I-ORG)
   Israeli (I-MISC)
   West Bank (I-LOC)
   Palestinian (I-MISC)
@@ -52,19 +47,19 @@ Named Entities:
   Israeli (I-MISC)
   Rafah (I-LOC)
   Israeli (I-MISC)
-  Gaza Netzar Israel City (I-LOC)
+  Gaza Netzarim Israel City (I-LOC)
   Israeli (I-MISC)
-  Gazahia Gaza City (I-LOC)
+  Gaza City (I-LOC)
 
 Persuasive Contexts:
-Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and refugee camps, by foot or using donkeydrawn carts on roads littered with unexploded ordnance
+Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and  by foot or using donkeydrawn carts on roads littered with unexploded ordnance
 Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said
 The minimum number of trucks a day needed to contain the strips humanitarian crisis is 500, the UN says, which should arrive each day of the first sixweek phase of the ceasefire
 ----
 
 Extreme Negative Sentences:
-  {'sentence': 'Palestinians begin search for Gazas missing as they return to ruined homes\nCeasefire celebrations replaced by shock and sorrow as people begin to assess the scale of devastation\nAfter the first night in Gaza for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones', 'score': 0.8421633243560791, 'is_fact': 'False'}
-  {'sentence': '3 million population began to assess the scale of the devastation wreaked by Israel in retaliation for the 7 October 2023 Hamas attack', 'score': 0.8347379565238953, 'is_fact': 'False'}
+  {'sentence': 'After the first night in  for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones', 'score': 0.868401825428009, 'is_fact': 'False'}
+  {'sentence': '3 million population began to assess the scale of the devastation wreaked by  in retaliation for the 7 October 2023 Hamas attack', 'score': 0.8216890692710876, 'is_fact': 'False'}
   {'sentence': 'Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons', 'score': 0.8564781546592712, 'is_fact': 'False'}
   {'sentence': 'Overnight, Israeli extremists set homes and cars on fire in three West Bank villages', 'score': 0.8299496173858643, 'is_fact': 'False'}
   {'sentence': 'The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble', 'score': 0.8934224843978882, 'is_fact': 'False'}
@@ -77,6 +72,6 @@ Extreme Negative Sentences:
 ----
 
 Summary:
-Ceasefire celebrations replaced by shock and sorrow as people begin to assess the scale of devastation. First night in Gaza for more than a year without the sound of drones or bombing overhead.
+Ceasefire between Israel and Hamas took effect on Sunday night. It is the first time in more than a year that the two sides have been in contact. The truce has been greeted with euphoria in Gaza. But it has also been met with shock and anger.
 ----
 

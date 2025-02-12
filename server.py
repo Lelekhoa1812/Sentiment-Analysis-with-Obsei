@@ -47,15 +47,19 @@ MONGO_URI = os.getenv("MONGO_URI")
 if not MONGO_URI:
     raise ValueError("❌ MongoDB URI (MONGO_URI) is missing! Please add it to your .env file.")
 client = MongoClient(MONGO_URI)
-import re  # (if not already imported)
+# Setup db name as article URL
+import hashlib
 def get_db_for_url(article_url):
     """
-    Returns a MongoDB database whose name is derived from the article URL.
-    Non-alphanumeric characters are replaced with underscores.
+    Returns a MongoDB database whose name is derived from an MD5 hash of the article URL.
+    This guarantees that the database name is short enough (always 32 hex characters, plus any prefix).
     """
-    # Remove protocol (e.g., 'https://') and replace any non-word character with underscore.
-    sanitized = re.sub(r'\W+', '_', article_url)
-    return client[sanitized]
+    # Compute MD5 hash of the URL
+    hash_digest = hashlib.md5(article_url.encode('utf-8')).hexdigest()
+    # Optionally, add a prefix (here "db_") so the database name is something like "db_<hash>"
+    db_name = f"db_{hash_digest}"
+    return client[db_name]
+
 
 ##########################################
 # Functions for Text Preprocessing       #
@@ -165,7 +169,7 @@ def analyze_data(analyzer, data, config):
         return []
 
 # Process big data, split and collect analysis
-def analyze_sentence_sentiments(text, article_key_phrases=None, extreme_threshold=0.8):
+def analyze_sentence_sentiments(text, lang="en", article_key_phrases=None, extreme_threshold=0.8):
     """
     Splits the text into sentences (using '.' and ';' as delimiters),
     performs sentiment analysis on each sentence individually,
@@ -179,8 +183,12 @@ def analyze_sentence_sentiments(text, article_key_phrases=None, extreme_threshol
     neutral_count = 0
     extreme_negative_sentences = []
     sentence_result = [] # To debug
-    # Use the sentiment analysis pipeline for individual sentences.
-    sentence_sentiment_model = pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
+    # Use the sentiment analysis pipeline for individual sentences. Usage may differ with a re-enforced model for Vietnamese language.
+    if lang == "vi":
+        # Use a Vietnamese-specific sentiment model (replace with the model that works best for you)
+        sentiment_model = pipeline("sentiment-analysis", model="VietAI/vibert-sentiment", tokenizer="VietAI/vibert-sentiment")
+    else:
+        sentence_sentiment_model = pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
     for sentence in sentences:
         sentence = sentence.strip() # Split each to analyze
         if not sentence:
@@ -414,7 +422,7 @@ def fact_check_sentence(sentence, key_phrases=None, api_key=GOOGLE_FACT_CHECK_AP
 # Summarization Functions                #
 ##########################################
 
-def summarize_text(text):
+def summarize_text(text, lang="en"):
     """Generates a concise summary using Facebook's Bart Large CNN model."""
     try:
         print("Summarizing text with Bart...")
@@ -425,7 +433,11 @@ def summarize_text(text):
             return text
         max_summary_length = min(1024, max(input_length // 2, 50))
         min_summary_length = min(max_summary_length // 2, 30)
-        summarization_model = pipeline("summarization", model="facebook/bart-large-cnn", tokenizer="facebook/bart-large-cnn")
+        if lang == "vi":
+            # Use a Vietnamese summarization model
+            summarization_model = pipeline("summarization", model="VietAI/vit5-base", tokenizer="VietAI/vit5-base")
+        else:
+            summarization_model = pipeline("summarization", model="facebook/bart-large-cnn", tokenizer="facebook/bart-large-cnn")
         summary = summarization_model(
             text,
             max_length=max_summary_length,
@@ -443,7 +455,7 @@ def summarize_text(text):
         print(f"Error summarizing text: {e}")
         return "Summarization unavailable."
 
-def enhanced_summarize_text(text):
+def enhanced_summarize_text(text, lang="en"):
     """
     Generates an enhanced summary using a model with a higher token allowance (e.g., Longformer).
     Note: Replace with your preferred long-document summarization model if available.
@@ -451,7 +463,10 @@ def enhanced_summarize_text(text):
     try:
         print("Summarizing text with enhanced model (Longformer)...")
         text = truncate_text_for_model(text, max_length=3500)  # Longformer can accept more tokens
-        summarization_model = pipeline("summarization", model="allenai/longformer-base-4096", tokenizer="allenai/longformer-base-4096")
+        if lang == "vi":
+            summarization_model = pipeline("summarization", model="VietAI/vit5-base", tokenizer="VietAI/vit5-base")
+        else:
+            summarization_model = pipeline("summarization", model="allenai/longformer-base-4096", tokenizer="allenai/longformer-base-4096")
         summary = summarization_model(
             text,
             max_length=300,
@@ -462,7 +477,7 @@ def enhanced_summarize_text(text):
         return summary[0]["summary_text"]
     except Exception as e:
         print(f"Error in enhanced summarization: {e}")
-        return summarize_text(text)  # Fallback to the standard summarizer
+        return summarize_text(text, lang=lang)  # Fallback to the standard summarizer
 
 
 ##########################################
@@ -560,9 +575,9 @@ def main():
             named_entities = perform_ner(processed_text)
             named_entities_cleaned = filter_named_entities(named_entities)
             persuasive_contexts = extract_persuasive_contexts(processed_text)
-            summary = enhanced_summarize_text(processed_text)
+            summary = enhanced_summarize_text(processed_text, lang=detected_language)
             # Perform sentence-level sentiment analysis for more granular evaluation.
-            sentence_sentiment = analyze_sentence_sentiments(processed_text, article_key_phrases=key_phrases)
+            sentence_sentiment = analyze_sentence_sentiments(processed_text, lang=detected_language, article_key_phrases=key_phrases)
             # Write result to file
             write_analysis(analyzed_data, output_file, sentiment, persuasive_contexts, summary, sentence_sentiment)
             # Prepare JSON response (including extreme negative sentences has been fact checked) - Removed since not using Facebook model anymore
