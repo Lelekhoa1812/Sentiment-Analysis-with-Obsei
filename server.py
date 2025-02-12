@@ -186,7 +186,7 @@ def analyze_sentence_sentiments(text, lang="en", article_key_phrases=None, extre
     # Use the sentiment analysis pipeline for individual sentences. Usage may differ with a re-enforced model for Vietnamese language.
     if lang == "vi":
         # Use a Vietnamese-specific sentiment model (replace with the model that works best for you)
-        sentiment_model = pipeline("sentiment-analysis", model="VietAI/vibert-sentiment", tokenizer="VietAI/vibert-sentiment")
+        sentence_sentiment_model = pipeline("text-classification", model="mr4/phobert-base-vi-sentiment-analysis")
     else:
         sentence_sentiment_model = pipeline("sentiment-analysis", model="cardiffnlp/twitter-xlm-roberta-base-sentiment")
     for sentence in sentences:
@@ -435,7 +435,7 @@ def summarize_text(text, lang="en"):
         min_summary_length = min(max_summary_length // 2, 30)
         if lang == "vi":
             # Use a Vietnamese summarization model
-            summarization_model = pipeline("summarization", model="VietAI/vit5-base", tokenizer="VietAI/vit5-base")
+            summarization_model = pipeline("summarization", model="VietAI/vit5-large-vietnews-summarization", tokenizer="VietAI/vit5-base")
         else:
             summarization_model = pipeline("summarization", model="facebook/bart-large-cnn", tokenizer="facebook/bart-large-cnn")
         summary = summarization_model(
@@ -464,7 +464,7 @@ def enhanced_summarize_text(text, lang="en"):
         print("Summarizing text with enhanced model (Longformer)...")
         text = truncate_text_for_model(text, max_length=3500)  # Longformer can accept more tokens
         if lang == "vi":
-            summarization_model = pipeline("summarization", model="VietAI/vit5-base", tokenizer="VietAI/vit5-base")
+            summarization_model = pipeline("summarization", model="VietAI/vit5-large-vietnews-summarization", tokenizer="VietAI/vit5-large-vietnews-summarization")
         else:
             summarization_model = pipeline("summarization", model="allenai/longformer-base-4096", tokenizer="allenai/longformer-base-4096")
         summary = summarization_model(
