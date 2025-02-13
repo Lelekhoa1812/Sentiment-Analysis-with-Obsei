@@ -187,7 +187,15 @@ python sentiment_analysis.py
 ```
 
 ### **4. View the Results**
-- Processed insights will be saved in `output_example.txt`.
+- Processed insights will be saved in `output_example.txt`. Example [output](https://github.com/Lelekhoa1812/Sentiment-Analysis-with-Obsei/blob/main/obsei_analysis.txt).
+
+### **5. Fetch saved results from database**
+- Each analysis result can be saved to MongoDB, with user need to create a `.env`
+environment file to store data on db. Running this script to fetch result data from the database, write and saved in `txt` format:
+```bash
+python3 fetchdb.py
+```   
+Example [retrieval of result data](https://github.com/Lelekhoa1812/Sentiment-Analysis-with-Obsei/blob/main/database_data.txt) saved from MongoDB(formatted as JSON).  
 
 ---
 
@@ -227,7 +235,9 @@ INET/
 │   └── index.html
 ├── server.py              # Flask server
 ├── sentiment_analysis.py  # To use python on terminal
-├── output_example.txt
+├── fetchdb.py             # Fetch and save data from MongoDB
+├── obsei_analysis.txt
+├── database_data.txt
 ├── README.md
 ├── dependencies.md
 ├── requirements.txt

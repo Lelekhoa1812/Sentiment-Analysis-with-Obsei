@@ -105,5 +105,44 @@
         ],
         "timestamp": "2025-02-07 05:33:13.348000",
         "db_name": "db_4bf631363062d33e3caac0b33aee091b"
+    },
+    {
+        "_id": "67ad69802c8adad6110da176",
+        "article_url": "https://vnexpress.net/hun-sen-tiet-lo-ve-am-muu-am-sat-ong-bang-drone-4848659.html",
+        "language": "vi",
+        "positive": 0.0,
+        "negative": 53.8462,
+        "neutral": 46.1538,
+        "key_phrases": [
+            "Ch",
+            "Ang"
+        ],
+        "named_entities": [
+            "Ang Snuol Kandal Ch",
+            "Campuchia",
+            "Hun Sen Takhmao Kandal",
+            "Campuchi",
+            "Hun Sen Take Camp Ch Hu D"
+        ],
+        "persuasive_contexts": [
+            "T\u00f4i k\u00eau g\u1ecdi ng\u01b0\u1eddi n\u01b0\u1edbc ngo\u00e0i h\u00e3y c\u1ea9n tr\u1ecdng, kh\u00f4ng \u1ee7ng h\u1ed9 ho\u1ea1t \u0111\u1ed9ng kh\u1ee7ng b\u1ed1 hay can d\u1ef1 v\u00e0o c\u00f4ng vi\u1ec7c n\u1ed9i b\u1ed9 c\u1ee7a Campuchia, Ch\u1ee7 t\u1ecbch Th\u01b0\u1ee3ng vi\u1ec7n Hun Sen n\u00f3i th\u00eam",
+            "\u00d4ng cho bi\u1ebft Ch\u1ee7 t\u1ecbch Th\u01b0\u1ee3ng vi\u1ec7n Hun Sen l\u00e0 l\u00e3nh \u0111\u1ea1o \u0111\u01b0\u1ee3c c\u00f4ng nh\u1eadn r\u1ed9ng r\u00e3i \u1edf c\u1ea3 trong n\u01b0\u1edbc v\u00e0 qu\u1ed1c t\u1ebf, n\u00ean m\u1ed9t cu\u1ed9c t\u1ea5n c\u00f4ng nh\u01b0 v\u1eady s\u1ebd g\u00e2y t\u00e1c \u0111\u1ed9ng nghi\u00eam tr\u1ecdng \u0111\u1ebfn \u1ed5n \u0111\u1ecbnh ch\u00ednh tr\u1ecb t\u1ea1i Campuchia",
+            "\u00d4ng c\u0169ng \u0111\u1ec1 ngh\u1ecb t\u0103ng c\u01b0\u1eddng bi\u1ec7n ph\u00e1p b\u1ea3o v\u1ec7 an ninh cho c\u00e1c l\u00e3nh \u0111\u1ea1o nh\u01b0 \u00f4ng Hun Sen"
+        ],
+        "summary_contexts": "Ch\u1ee7 t\u1ecbch Th\u01b0\u1ee3ng vi\u1ec7n Campuchia Hun Sen n\u00f3i \u00e2m m\u01b0u t\u1ea5n c\u00f4ng b\u1eb1ng thi\u1ebft b\u1ecb bay kh\u00f4ng ng\u01b0\u1eddi l\u00e1i c\u1ee7a nh\u1eefng k\u1ebb kh\u1ee7ng b\u1ed1 nh\u1eb1m v\u00e0o nh\u00e0 \u00f4ng t\u1ea1i t\u1ec9nh Kandal l\u00e0 h\u00e0nh \u0111\u1ed9ng kh\u1ee7ng b\u1ed1 v\u00e0 k\u00eau g\u1ecdi ng\u01b0\u1eddi n\u01b0\u1edbc ngo\u00e0i kh\u00f4ng \u1ee7ng h\u1ed9 phong tr\u00e0o n\u00e0y .",
+        "extreme_negative_sentences": [
+            {
+                "sentence": "\u0110\u00e2y l\u00e0 h\u00e0nh \u0111\u1ed9ng kh\u1ee7ng b\u1ed1",
+                "score": 0.8848502039909363,
+                "is_fact": "None"
+            },
+            {
+                "sentence": "Quan ch\u1ee9c n\u00e0y cho r\u1eb1ng \u0111\u00e2y c\u00f3 th\u1ec3 l\u00e0 \u00e2m m\u01b0u c\u1ee7a c\u00e1c ch\u00ednh tr\u1ecb gia c\u1ef1c \u0111oan nh\u1eb1m t\u1ea1o ra c\u0103ng th\u1eb3ng n\u1ed9i b\u1ed9 \u1edf qu\u1ed1c gia \u0110\u00f4ng Nam \u00c1 v\u00e0 k\u00eau g\u1ecdi l\u1ef1c l\u01b0\u1ee3ng an ninh \u0111i\u1ec1u tra h\u1ecd",
+                "score": 0.8251363635063171,
+                "is_fact": "False"
+            }
+        ],
+        "timestamp": "2025-02-13 03:39:44.794000",
+        "db_name": "db_b67ccdc2c6e56e75217ef6cdb8fe54e6"
     }
 ]

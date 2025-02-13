@@ -480,7 +480,7 @@ def enhanced_summarize_text(text, lang="en"):
 # Writing Analysis Results               #
 ##########################################
 
-output_file = "output_example.txt"
+output_file = "obsei_analysis.txt"
 
 # Write analysis to txt
 def write_analysis(data, output_path, sentiment, persuasive_contexts, summary, sentence_sentiment):
