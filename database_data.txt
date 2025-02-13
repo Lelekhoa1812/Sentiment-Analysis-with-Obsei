@@ -1,0 +1,109 @@
+[
+    {
+        "_id": "67a59b19ede49f37b4d2ada8",
+        "article_url": "https://www.theguardian.com/world/2025/jan/20/palestinians-search-gaza-missing-return-ruined-homes",
+        "language": "en",
+        "positive": 2.5641,
+        "negative": 66.6667,
+        "neutral": 30.7692,
+        "key_phrases": [
+            "Israel",
+            "Yesh",
+            "Gaza Netzarim Israel",
+            "West",
+            "Rafah",
+            "La",
+            "Hamas",
+            "Palestinian",
+            "Gaza La",
+            "Israeli",
+            "Gaza",
+            "Ramallah"
+        ],
+        "named_entities": [
+            "Palestinian",
+            "Hamas",
+            "Israel",
+            "Hamas",
+            "Gaza City Saraya Square",
+            "Israeli",
+            "West Bank",
+            "Palestinian",
+            "Ramallah",
+            "Israeli",
+            "West Bank",
+            "Israel Defense Forces Yesh Din",
+            "Israeli",
+            "Rafah",
+            "Israeli",
+            "Gaza Netzarim Israel City",
+            "Israeli",
+            "Gaza City"
+        ],
+        "persuasive_contexts": [
+            "Within northern and southern Gaza, however, displaced civilians have started making the long journey back to their towns, villages and  by foot or using donkeydrawn carts on roads littered with unexploded ordnance",
+            "Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said",
+            "The minimum number of trucks a day needed to contain the strips humanitarian crisis is 500, the UN says, which should arrive each day of the first sixweek phase of the ceasefire"
+        ],
+        "summary_contexts": "Ceasefire between Israel and Hamas took effect on Sunday night. It is the first time in more than a year that the two sides have been in contact. The truce has been greeted with euphoria in Gaza. But it has also been met with shock and anger.",
+        "extreme_negative_sentences": [
+            {
+                "sentence": "After the first night in  for more than a year without the sound of drones or bombing overhead following the successful implementation of a ceasefire, people in the besieged Palestinian territory have begun returning to destroyed homes and searching for missing loved ones",
+                "score": 0.868401825428009,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "3 million population began to assess the scale of the devastation wreaked by  in retaliation for the 7 October 2023 Hamas attack",
+                "score": 0.8216890692710876,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "Israeli settlers in the occupied West Bank opposed to the deal tried to block entrances to the Palestinian city of Ramallah on Sunday evening before the return of 90 women and children held in Israeli prisons",
+                "score": 0.8564781546592712,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "Overnight, Israeli extremists set homes and cars on fire in three West Bank villages",
+                "score": 0.8299496173858643,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "The first feeling I had when I reached Beit Lahia was shock and panic at the horror and rubble",
+                "score": 0.8934224843978882,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "It is as if a Richter nine earthquake hit my city  There are no streets, no shops, no parks, no markets, no hospitals, or municipalities",
+                "score": 0.8528622388839722,
+                "is_fact": "None"
+            },
+            {
+                "sentence": "Another 110,000 are wounded, with a quarter of those facing lifechanging injuries, and 12,000 people need to be evacuated for urgent treatment elsewhere, the World Health Organization WHO has said",
+                "score": 0.8519909977912903,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "Her home was completely gone, she said, adding that neighbours had already started digging through the debris in search of missing relatives believed to be buried in the rubble of Israeli airstrikes",
+                "score": 0.8716922998428345,
+                "is_fact": "False"
+            },
+            {
+                "sentence": "The local Kamal Adwan hospital was also completely destroyed, she said",
+                "score": 0.887965202331543,
+                "is_fact": "None"
+            },
+            {
+                "sentence": "Its no longer a hospital at all  They destroyed everything",
+                "score": 0.9254767298698425,
+                "is_fact": "None"
+            },
+            {
+                "sentence": "Israel denies it has deliberately strangled aid supplies to the Palestinian territory, blaming aid agencies for delays and claiming Hamas siphons off deliveries",
+                "score": 0.9078037738800049,
+                "is_fact": "False"
+            }
+        ],
+        "timestamp": "2025-02-07 05:33:13.348000",
+        "db_name": "db_4bf631363062d33e3caac0b33aee091b"
+    }
+]
