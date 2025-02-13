@@ -267,9 +267,17 @@ python server.py
 
 - Web Demo:  
 
-<img src="imgsrc/obsei_ui1.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+<img src="imgsrc/obsei_ui_1.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
 
-<img src="imgsrc/obsei_ui2.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+<img src="imgsrc/obsei_ui_2.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+
+<img src="imgsrc/obsei_ui_3.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+
+<img src="imgsrc/obsei_ui_4.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+
+<img src="imgsrc/obsei_ui_5.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
+
+<img src="imgsrc/obsei_ui_6.png" alt="Obsei Text Holder" style="width: 80%; max-width: 1000px;"> 
 ---
 
 ## **Conclusion**
