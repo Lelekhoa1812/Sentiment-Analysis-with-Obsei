@@ -37,7 +37,8 @@ def main():
     # Write the fetched data to a file
     output_file = "database_data.txt"
     with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(all_data, f, indent=4, default=str)
+        # Ensure_ascii=False to preserve non-ASCII characters (e.g., Vietnamese language)
+        json.dump(all_data, f, indent=4, default=str, ensure_ascii=False)
     print(f"Fetched {len(all_data)} documents and saved to {output_file}")
 if __name__ == "__main__":
     main()
